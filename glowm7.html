@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZARIEL — GLOW M7</title>
+<meta name="description" content="GLOW M7 por ZARIEL — método de transformação, imagem e presença masculina.">
+<script>
+  /*
+   * Detecção leve de automação (Puppeteer/Selenium/Playwright/PhantomJS).
+   * Isto NÃO bloqueia scrapers HTTP simples (curl, requests, Scrapy) —
+   * esses nunca executam este script, porque não rodam JavaScript.
+   * Serve apenas para sinalizar navegadores automatizados que renderizam
+   * a página de verdade. A defesa real de banda é feita na borda
+   * (Cloudflare/Vercel Firewall), não aqui.
+   */
+  (function () {
+    "use strict";
+    try {
+      var flags = [];
+
+      if (navigator.webdriver === true) flags.push("webdriver");
+
+      var ua = navigator.userAgent || "";
+      if (/HeadlessChrome|Headless|PhantomJS|Puppeteer|Playwright|Selenium/i.test(ua)) {
+        flags.push("ua-signature");
+      }
+
+      // Chrome "de verdade" sempre expõe window.chrome; builds headless antigos não.
+      var looksLikeChrome = /Chrome\//.test(ua) && !/Edg\/|OPR\//.test(ua);
+      if (looksLikeChrome && typeof window.chrome === "undefined") flags.push("missing-chrome-object");
+
+      // Navegador real quase nunca tem 0 plugins nem 0 idiomas configurados.
+      if (navigator.plugins && navigator.plugins.length === 0) flags.push("no-plugins");
+      if (!navigator.languages || navigator.languages.length === 0) flags.push("no-languages");
+
+      if (flags.length > 0) {
+        document.documentElement.setAttribute("data-automation-suspect", flags.join(","));
+      }
+    } catch (e) {
+      // silencioso — nunca deixar isso quebrar o carregamento da página
+    }
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#020307;
+    --black-soft:#05070D;
+
+    --navy-deep:#061225;
+    --navy:#081B38;
+    --navy-bright:#0B2E63;
+
+    --neon-blue:#2F6BFF;
+    --neon-blue-bright:#4F83FF;
+    --neon-blue-soft:#7CA4FF;
+
+    --white:#F7F9FF;
+
+    --text-primary:#F7F9FF;
+    --text-secondary:rgba(225,233,255,.58);
+
+    --neon-border:rgba(79,131,255,.32);
+    --neon-glow:rgba(47,107,255,.35);
+
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth; max-width:100%; overflow-x:hidden;}
+  body{
+    font-family:"Manrope",-apple-system,sans-serif;
+    background:var(--black);
+    color:var(--text-primary);
+    max-width:100%;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,video{max-width:100%; display:block;}
+  a{color:inherit;}
+  section{position:relative; padding-block:clamp(90px,10vw,180px); overflow:hidden; contain:paint;}
+  .wrap{max-width:1360px; margin-inline:auto; padding-inline:clamp(20px,5vw,64px); position:relative; z-index:2;}
+
+  .eyebrow{
+    font-weight:500;
+    font-size:12.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--neon-blue-soft);
+  }
+  .display-title{
+    font-weight:700;
+    letter-spacing:-.055em;
+    line-height:.94;
+    text-wrap:balance;
+    max-width:900px;
+  }
+  .section-title{
+    font-weight:500;
+    letter-spacing:-.045em;
+    line-height:1.04;
+    text-wrap:balance;
+    max-width:900px;
+    color:var(--text-primary);
+  }
+  p.lede{
+    max-width:560px;
+    color:var(--text-secondary);
+    font-size:17px;
+    line-height:1.65;
+  }
+
+  /* section ghost title */
+  .section-ghost-title{
+    position:absolute; z-index:0;
+    top:50%; left:50%; transform:translate(-50%,-50%);
+    font-size:clamp(8rem,20vw,22rem);
+    font-weight:700; letter-spacing:-.08em; text-transform:uppercase;
+    color:rgba(79,131,255,.035);
+    white-space:nowrap;
+    pointer-events:none; user-select:none;
+  }
+
+  /* reveal */
+  .reveal-line{
+    display:block;
+    opacity:0;
+    transform:translateY(28px);
+    filter:blur(5px);
+    transition:
+      opacity .85s var(--ease),
+      transform .85s var(--ease),
+      filter .85s var(--ease);
+  }
+  .reveal-line.is-visible{opacity:1; transform:translateY(0); filter:blur(0);}
+  .reveal-fade{
+    opacity:0; transform:translateY(24px);
+    transition:opacity .9s var(--ease), transform .9s var(--ease);
+  }
+  .reveal-fade.is-visible{opacity:1; transform:translateY(0);}
+
+  /* premium cta — navy / neon */
+  .premium-cta{
+    display:inline-flex;
+    align-items:stretch;
+    min-height:60px;
+    background:linear-gradient(135deg, #102B5C, #173E86);
+    color:#fff;
+    border:1px solid var(--neon-border);
+    border-radius:8px;
+    overflow:hidden;
+    text-decoration:none;
+    box-shadow:0 14px 45px rgba(47,107,255,.13);
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), background .35s ease;
+  }
+  .premium-cta__label{
+    display:flex; align-items:center;
+    padding:0 28px;
+    font-size:13px; font-weight:600; letter-spacing:.06em;
+    white-space:nowrap;
+  }
+  .premium-cta__icon{
+    width:60px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    border-left:1px solid rgba(255,255,255,.16);
+    font-size:19px;
+    transition:transform .35s var(--ease), background .35s ease;
+  }
+  .premium-cta:hover{
+    transform:translateY(-3px);
+    background:linear-gradient(135deg, #173875, #2250A8);
+    box-shadow:0 18px 55px rgba(47,107,255,.24);
+  }
+  .premium-cta:hover .premium-cta__icon{background:rgba(255,255,255,.08); transform:translate(2px,-2px);}
+
+  @media (max-width:640px){
+    .premium-cta{width:100%;}
+    .premium-cta__label{padding:0 22px; flex:1;}
+  }
+
+  .section-cta{display:flex; justify-content:center; margin-top:56px;}
+  @media (max-width:640px){
+    .section-cta{width:100%;}
+  }
+
+  /* navbar */
+  .navbar{
+    position:fixed; inset-inline:0; top:0; z-index:50;
+    background:transparent;
+    border-bottom:1px solid transparent;
+    transition:background .4s ease, border-color .4s ease, backdrop-filter .4s ease;
+    transform:translateZ(0);
+    will-change:background-color;
+  }
+  .navbar.scrolled{
+    background:rgba(2,3,7,.82);
+    backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--neon-border);
+  }
+  .navbar__inner{
+    max-width:1360px; margin-inline:auto;
+    padding:22px clamp(20px,5vw,64px);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .navbar__brand{
+    font-size:14px; font-weight:600; letter-spacing:.2em;
+    color:#fff; text-decoration:none;
+  }
+  .navbar__links{
+    display:flex; align-items:center; gap:40px;
+    list-style:none;
+  }
+  .navbar__links a{
+    font-size:12px; font-weight:500; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--text-secondary);
+    text-decoration:none;
+    position:relative;
+    padding-bottom:4px;
+    transition:color .3s ease;
+  }
+  .navbar__links a::after{
+    content:""; position:absolute; left:0; right:100%; bottom:0; height:1px;
+    background:var(--neon-blue-soft); transition:right .35s var(--ease);
+  }
+  .navbar__links a:hover{color:var(--neon-blue-soft);}
+  .navbar__links a:hover::after{right:0;}
+  .navbar__cta{
+    font-size:11.5px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+    color:#fff; text-decoration:none;
+    border:1px solid var(--neon-border);
+    padding:11px 22px; border-radius:6px;
+    transition:background .3s ease, border-color .3s ease, color .3s ease;
+  }
+  .navbar__cta:hover{background:var(--neon-blue); color:#fff; border-color:var(--neon-blue);}
+
+  .navbar__toggle{
+    display:none;
+    flex-direction:column; align-items:center; justify-content:center; gap:5px;
+    width:42px; height:42px; flex-shrink:0;
+    background:transparent;
+    border:1px solid var(--neon-border);
+    border-radius:6px;
+    cursor:pointer;
+  }
+  .navbar__toggle span{
+    display:block; width:18px; height:1.5px;
+    background:#fff;
+    transition:transform .3s var(--ease), opacity .3s ease;
+  }
+  .navbar__toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+  .navbar__toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
+  .navbar__toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+  .mobile-menu{
+    position:fixed; inset:0; z-index:60;
+    background:rgba(2,3,7,.97);
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    display:flex; flex-direction:column;
+    padding:22px clamp(20px,5vw,64px) 40px;
+    opacity:0; visibility:hidden;
+    transform:translateY(-14px);
+    transition:opacity .35s var(--ease), transform .35s var(--ease), visibility 0s linear .35s;
+  }
+  .mobile-menu.is-open{
+    opacity:1; visibility:visible; transform:translateY(0);
+    transition:opacity .35s var(--ease), transform .35s var(--ease), visibility 0s linear 0s;
+  }
+  .mobile-menu__head{display:flex; align-items:center; justify-content:space-between;}
+  .mobile-menu__brand{font-size:14px; font-weight:600; letter-spacing:.2em; color:#fff;}
+  .mobile-menu__close{
+    width:42px; height:42px;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--neon-border); border-radius:6px;
+    background:transparent; color:#fff;
+    cursor:pointer;
+  }
+  .mobile-menu__links{
+    list-style:none;
+    margin-block:auto;
+    display:flex; flex-direction:column; gap:2px;
+  }
+  .mobile-menu__links a{
+    display:block; padding:18px 2px;
+    font-size:clamp(1.6rem,7vw,2.1rem); font-weight:600; letter-spacing:-.02em;
+    color:var(--text-primary); text-decoration:none;
+    border-bottom:1px solid rgba(79,131,255,.14);
+  }
+  .mobile-menu__links a:active{color:var(--neon-blue-soft);}
+  .mobile-menu__cta{margin-top:28px; width:100%;}
+
+  @media (max-width:900px){
+    .navbar__links{display:none;}
+    .navbar__cta{display:none;}
+    .navbar__toggle{display:flex;}
+  }
+  @media (min-width:901px){
+    .mobile-menu{display:none;}
+  }
+
+  /* ============ HERO — TIPOGRÁFICO ============ */
+  .hero{
+    min-height:100svh;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--black);
+    color:var(--text-primary);
+    overflow:hidden;
+    position:relative;
+    padding:150px 0 90px;
+    text-align:center;
+  }
+  .hero-grid{
+    position:absolute; inset:0; z-index:0;
+    background-image:
+      linear-gradient(rgba(79,131,255,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,131,255,.05) 1px, transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(circle at center, black, transparent 72%);
+    mask-image:radial-gradient(circle at center, black, transparent 72%);
+  }
+  .hero-content{
+    position:relative; z-index:2;
+    display:flex; flex-direction:column; align-items:center;
+    max-width:1500px; margin-inline:auto;
+  }
+  .hero-eyebrow{
+    font-size:12px; font-weight:600; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--text-secondary);
+    margin-bottom:22px;
+  }
+  .hero-announcement{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:9px 16px;
+    border:1px solid var(--neon-border);
+    border-radius:999px;
+    background:rgba(47,107,255,.06);
+    color:var(--neon-blue-soft);
+    font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    margin-bottom:34px;
+  }
+
+  .hero-product-name{
+    font-size:clamp(4.5rem,9vw,10rem);
+    line-height:.82;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--text-primary);
+    margin-bottom:30px;
+    opacity:0;
+    filter:blur(14px);
+    transform:translateY(18px) scale(.985);
+  }
+  .hero-product-name.is-visible{
+    opacity:1;
+    letter-spacing:-.065em;
+    filter:blur(0);
+    transform:translateY(0) scale(1);
+    transition:
+      opacity 1.1s var(--ease),
+      transform 1.1s var(--ease),
+      filter 1.1s var(--ease),
+      letter-spacing 1.25s var(--ease);
+  }
+  .hero-product-accent{
+    position:relative;
+    display:inline-block;
+    color:var(--neon-blue-bright);
+    text-shadow:0 0 18px rgba(79,131,255,.32), 0 0 42px rgba(47,107,255,.18);
+    overflow:hidden;
+  }
+  .hero-product-accent::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.5) 50%, transparent 70%);
+    transform:translateX(-130%);
+    animation:brandSweep 1.6s var(--ease) 1.6s forwards;
+  }
+  @keyframes brandSweep{to{transform:translateX(130%);}}
+
+  .hero-title{
+    font-weight:700;
+    font-size:clamp(2.6rem,4.4vw,4.6rem);
+    line-height:1.02;
+    letter-spacing:-.045em;
+    max-width:1100px;
+  }
+  .hero-line-mask{overflow:hidden; display:block;}
+  .hero-line{
+    display:block;
+    color:var(--text-primary);
+    transform:translateY(115%);
+    opacity:0;
+    animation:heroLineReveal 1s var(--ease) forwards;
+  }
+  .hero-line-accent{color:var(--neon-blue-bright);}
+  .hero-line-mask:nth-child(1) .hero-line{animation-delay:1.3s;}
+  .hero-line-mask:nth-child(2) .hero-line{animation-delay:1.45s;}
+  @keyframes heroLineReveal{to{transform:translateY(0); opacity:1;}}
+  .hero-description{
+    max-width:680px;
+    margin:28px auto 0;
+    font-size:clamp(1rem,1.3vw,1.25rem);
+    line-height:1.55;
+    color:var(--text-secondary);
+  }
+  .hero-cta{margin-top:44px;}
+  .hero-primary-cta{
+    display:inline-flex; align-items:center; gap:28px;
+    min-height:58px;
+    padding:0 24px 0 28px;
+    background:linear-gradient(135deg, #102B5C, #173E86);
+    color:#fff;
+    border:1px solid var(--neon-border);
+    border-radius:8px;
+    font-size:13.5px; font-weight:600; letter-spacing:.03em; text-transform:uppercase;
+    text-decoration:none;
+    box-shadow:0 0 0 1px rgba(79,131,255,.05), 0 18px 55px rgba(47,107,255,.12);
+    transition:transform .35s var(--ease), background .35s ease, box-shadow .35s ease;
+  }
+  .hero-primary-cta:hover{
+    transform:translateY(-3px);
+    background:linear-gradient(135deg, #173875, #2250A8);
+    box-shadow:0 22px 60px rgba(47,107,255,.22);
+  }
+
+  .hero-ambient{position:absolute; inset:0; z-index:1; pointer-events:none;}
+  .hero-particle{
+    position:absolute;
+    width:2px; height:2px; border-radius:50%;
+    background:var(--neon-blue-bright);
+    box-shadow:0 0 8px rgba(79,131,255,.45);
+    opacity:.25;
+    animation:ambientFloat 12s ease-in-out infinite;
+  }
+  @keyframes ambientFloat{
+    0%,100%{transform:translate3d(0,0,0); opacity:.15;}
+    50%{transform:translate3d(0,-12px,0); opacity:.5;}
+  }
+  .hero-glow{
+    position:absolute; z-index:1;
+    width:900px; height:500px; max-width:90vw;
+    left:50%; top:42%; transform:translate(-50%,-50%);
+    background:radial-gradient(ellipse, rgba(47,107,255,.16) 0%, rgba(15,45,100,.07) 40%, transparent 72%);
+    filter:blur(80px);
+    pointer-events:none;
+  }
+  @media (max-width:960px){
+    .hero{padding:130px 20px 80px;}
+    .hero-product-name{font-size:clamp(3.6rem,17vw,5.5rem);}
+    .hero-title{font-size:clamp(2.2rem,8.5vw,2.8rem);}
+    .hero-description{max-width:90%;}
+    .hero-cta{width:100%; max-width:420px; margin-inline:auto;}
+    .hero-primary-cta{width:100%; justify-content:center;}
+  }
+  @media (max-width:480px){
+    .hero-product-name{font-size:clamp(3.2rem,19vw,4.4rem);}
+    .hero-announcement{text-align:center; font-size:10.5px;}
+    .hero-glow{width:560px; height:340px;}
+    .hero-particle:nth-child(n+9){display:none;}
+  }
+
+  /* ============ MÉTODO — INTRO ============ */
+  .method-intro{background:var(--black-soft);}
+  .method-intro .wrap{text-align:center;}
+  .method-intro .section-title{
+    margin:18px auto 0; max-width:780px;
+    font-size:clamp(2.2rem,4.4vw,3.4rem);
+  }
+  .method-intro .lede{margin:24px auto 0; max-width:620px; text-align:center;}
+
+  /* ============ VIDEO SECTION ============ */
+  .video-section{background:var(--black-soft);}
+  .video-section .wrap{
+    display:grid; grid-template-columns:1fr 430px; gap:64px; align-items:center;
+  }
+  .video-section__copy{max-width:480px;}
+  .video-section__cta{margin-top:36px;}
+  .video-container{
+    position:relative;
+    width:min(100%,430px);
+    aspect-ratio:9/16;
+    margin-inline:auto;
+    overflow:hidden;
+    border-radius:12px;
+    background:var(--black);
+    border:1px solid var(--neon-border);
+    box-shadow:0 30px 100px rgba(47,107,255,.12);
+  }
+  .video-container__mark{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11rem; font-weight:800; letter-spacing:-.06em;
+    color:rgba(79,131,255,.07);
+    pointer-events:none;
+    z-index:0;
+  }
+  .video-player{
+    position:relative; z-index:1;
+    width:100%; height:100%; border:0; display:block; background:var(--black);
+  }
+  @media (max-width:960px){
+    .video-section .wrap{grid-template-columns:1fr; gap:48px; text-align:left;}
+    .video-container{width:min(100%,420px);}
+  }
+
+  /* ============ MODULES ============ */
+  .modules{background:var(--black);}
+  .modules__head{margin-bottom:64px;}
+  .modules__list{max-width:1000px;}
+  .module-row{
+    display:grid; grid-template-columns:80px 1fr; gap:28px;
+    padding-block:34px;
+    padding-inline:16px;
+    margin-inline:-16px;
+    border-top:1px solid rgba(79,131,255,.15);
+    transition:background .3s ease;
+  }
+  .module-row:hover{background:rgba(47,107,255,.035);}
+  .module-row:last-child{border-bottom:1px solid rgba(79,131,255,.15);}
+  .module-row__num{
+    font-size:15px; font-weight:600; letter-spacing:.04em;
+    color:var(--neon-blue-bright);
+    font-variant-numeric:tabular-nums;
+  }
+  .module-row__title{
+    font-size:19px; font-weight:600; letter-spacing:-.01em;
+    color:#fff; margin-bottom:8px;
+  }
+  .module-row__text{
+    font-size:15px; line-height:1.65; color:var(--text-secondary); max-width:520px;
+  }
+  @media (min-width:960px){
+    .modules__list{
+      column-count:2; column-gap:56px;
+    }
+    .module-row{break-inside:avoid;}
+  }
+
+  /* ============ RESULTS ============ */
+  .results{background:var(--navy-deep);}
+  .results__head{margin-bottom:56px;}
+  .transformation{position:relative;}
+  .transformation__media{
+    position:relative; aspect-ratio:9/16; overflow:hidden;
+    border-radius:6px;
+    background:var(--black);
+    border:1px solid var(--neon-border);
+  }
+  .transformation__media img{
+    width:100%; height:100%; object-fit:cover;
+    transition:transform .7s var(--ease);
+  }
+  .transformation:hover .transformation__media img{transform:scale(1.02);}
+  .transformation__placeholder{
+    position:absolute; inset:0;
+    display:none; align-items:center; justify-content:center;
+    color:var(--text-secondary); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    text-align:center; padding:16px;
+    background:var(--black);
+  }
+  .transformation__caption{
+    margin-top:14px;
+    font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--text-secondary);
+  }
+  .transformation__caption span{color:var(--neon-blue-soft);}
+  .results-grid{
+    display:grid; gap:28px;
+    grid-template-columns:repeat(3,1fr);
+    max-width:960px; margin-inline:auto;
+  }
+  @media (max-width:900px){
+    .results-grid{grid-template-columns:repeat(2,1fr); gap:20px; max-width:600px;}
+  }
+  @media (max-width:560px){
+    .results-grid{grid-template-columns:1fr; max-width:420px; margin-inline:auto;}
+  }
+
+  /* ============ PROBLEM ============ */
+  .problem{background:var(--navy);}
+  .problem__head{margin-bottom:60px;}
+  .problem-lines{max-width:760px;}
+  .problem-line{
+    display:grid; grid-template-columns:56px 1fr; gap:20px;
+    padding-block:26px;
+    border-top:1px solid rgba(79,131,255,.18);
+    font-size:17px; line-height:1.6; color:var(--text-secondary);
+  }
+  .problem-lines>.problem-line:last-child{border-bottom:1px solid rgba(79,131,255,.18);}
+  .problem-line__num{color:var(--neon-blue-bright); font-weight:600; font-variant-numeric:tabular-nums;}
+
+  /* ============ MENTOR ============ */
+  .mentor{background:var(--black);}
+  .mentor .wrap{display:grid; grid-template-columns:44% 1fr; gap:64px; align-items:center;}
+  .mentor__media{
+    position:relative; aspect-ratio:4/5; background:#0A0F1C; overflow:hidden; border-radius:4px;
+  }
+  .mentor__media::before{
+    content:"";
+    position:absolute; inset:-30%;
+    background:radial-gradient(ellipse at center, rgba(47,107,255,.22) 0%, transparent 65%);
+    filter:blur(50px);
+    z-index:0;
+  }
+  .mentor__media img{position:relative; z-index:1; width:100%; height:100%; object-fit:cover;}
+  .mentor__placeholder{
+    position:absolute; inset:0; z-index:1; display:flex; align-items:center; justify-content:center;
+    color:var(--text-secondary); font-size:12px; letter-spacing:.12em; text-transform:uppercase; text-align:center; padding:24px;
+  }
+  .mentor__copy .section-title{font-size:clamp(1.9rem,3.4vw,2.7rem); margin-bottom:20px;}
+  .mentor__lead{font-size:16px; font-weight:600; color:var(--neon-blue-soft); max-width:480px; margin-bottom:18px;}
+  .mentor__social{display:flex; flex-wrap:wrap; gap:14px; margin-top:8px;}
+  .mentor__social-link{
+    display:inline-flex; align-items:center; gap:9px;
+    padding:13px 18px;
+    border:1px solid rgba(79,131,255,.18);
+    border-radius:999px;
+    color:var(--text-secondary);
+    font-size:12.5px; font-weight:600; letter-spacing:.04em;
+    text-decoration:none;
+    transition:border-color .3s ease, color .3s ease, background .3s ease;
+  }
+  .mentor__social-link svg{width:16px; height:16px; flex-shrink:0;}
+  .mentor__social-link:hover{
+    color:var(--neon-blue-soft);
+    border-color:rgba(79,131,255,.45);
+    background:rgba(47,107,255,.06);
+  }
+  @media (max-width:900px){
+    .mentor .wrap{grid-template-columns:1fr; gap:40px;}
+  }
+
+  /* ============ TESTIMONIALS ============ */
+  .testimonials{background:var(--black);}
+  .testimonials__head{margin-bottom:56px; max-width:640px;}
+  .testimonials__head .section-title{margin-top:16px;}
+  .testimonials__head .lede{margin-top:16px;}
+  .testimonial-grid{
+    display:grid; gap:20px;
+    grid-template-columns:repeat(3,1fr);
+  }
+  @media (max-width:960px){
+    .testimonial-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:640px){
+    .testimonial-grid{grid-template-columns:1fr;}
+  }
+  .testimonial-card{
+    display:flex; flex-direction:column;
+    background:#050A14;
+    border:1px solid rgba(79,131,255,.15);
+    border-radius:4px;
+    padding:32px 28px;
+    transition:transform .3s var(--ease), border-color .3s ease, background .3s ease;
+  }
+  .testimonial-card:hover{
+    transform:translateY(-3px);
+    border-color:rgba(79,131,255,.35);
+    background:rgba(8,27,56,.45);
+  }
+  .testimonial-card__num{
+    font-size:14px; font-weight:600; font-variant-numeric:tabular-nums;
+    color:var(--neon-blue-bright);
+    margin-bottom:18px;
+  }
+  .testimonial-card__quote{
+    font-size:14.5px; line-height:1.65;
+    color:var(--text-primary);
+    flex:1;
+  }
+  .testimonial-card__author{
+    display:block; margin-top:22px;
+    font-size:10.5px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+    color:rgba(225,233,255,.50);
+  }
+
+  /* ============ GARANTIA ============ */
+  .guarantee{background:var(--navy);}
+  .guarantee__grid{
+    display:grid; grid-template-columns:1.15fr .85fr; gap:64px; align-items:center;
+  }
+  .guarantee__copy .section-title{margin:16px 0 0; font-size:clamp(2rem,4vw,2.9rem);}
+  .guarantee__copy .section-title span{color:var(--neon-blue-bright);}
+  .guarantee__text{margin-top:24px; display:flex; flex-direction:column; gap:16px; max-width:560px;}
+  .guarantee__text p{font-size:15.5px; line-height:1.7; color:var(--text-secondary);}
+  .guarantee__microcopy{
+    margin-top:22px; max-width:520px;
+    font-size:12.5px; line-height:1.6; color:rgba(225,233,255,.42);
+  }
+  .guarantee__cta{margin-top:32px;}
+
+  .guarantee__stat{position:relative; text-align:center; padding:40px 20px;}
+  .guarantee__stat-glow{
+    position:absolute; inset:-20%; z-index:0;
+    background:radial-gradient(circle, rgba(40,90,255,.18), rgba(5,15,40,.05) 45%, transparent 70%);
+    pointer-events:none;
+  }
+  .guarantee__stat-number{
+    position:relative; z-index:1;
+    font-size:clamp(6rem,11vw,10rem);
+    font-weight:700; line-height:.85; letter-spacing:-.04em;
+    color:var(--neon-blue-bright);
+    text-shadow:0 0 40px rgba(47,107,255,.25);
+  }
+  .guarantee__stat-label{
+    position:relative; z-index:1; margin-top:8px;
+    font-size:13px; font-weight:600; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--text-primary);
+  }
+  .guarantee__stat-note{
+    position:relative; z-index:1; margin:20px auto 0; max-width:280px;
+    font-size:12.5px; line-height:1.6; color:var(--text-secondary);
+  }
+  .guarantee__stat.reveal-fade{transform:translateY(24px) scale(.94);}
+  .guarantee__stat.reveal-fade.is-visible{transform:translateY(0) scale(1);}
+
+  @media (max-width:900px){
+    .guarantee__grid{grid-template-columns:1fr; gap:48px;}
+    .guarantee__stat{order:-1;}
+  }
+
+  /* ============ FAQ ============ */
+  .faq{background:var(--black-soft);}
+  .faq__glow{
+    position:absolute; z-index:0;
+    width:700px; height:700px; max-width:80vw;
+    right:-200px; top:10%;
+    background:radial-gradient(circle, rgba(47,107,255,.14) 0%, transparent 70%);
+    filter:blur(60px);
+    pointer-events:none;
+  }
+  .faq__head{max-width:680px; margin-inline:auto; text-align:center; position:relative; z-index:1;}
+  .faq__head .section-title{margin:16px auto 0; font-size:clamp(2.1rem,4.2vw,3.1rem);}
+  .faq__head .section-title span{color:var(--neon-blue-bright);}
+  .faq__head .lede{margin:20px auto 0; text-align:center;}
+
+  .faq-list{
+    position:relative; z-index:1;
+    max-width:1180px; margin:64px auto 0;
+    border-top:1px solid rgba(79,131,255,.14);
+  }
+  .faq-item{
+    border-bottom:1px solid rgba(79,131,255,.14);
+    transition:border-color .3s ease;
+  }
+  .faq-item:hover{border-bottom-color:rgba(79,131,255,.32);}
+  .faq-item__trigger{
+    width:100%;
+    display:grid;
+    grid-template-columns:44px 1fr 28px;
+    align-items:center;
+    gap:20px;
+    padding:26px 4px;
+    background:none; border:none; margin:0;
+    font-family:inherit; text-align:left; color:inherit;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .faq-item__trigger:focus-visible{
+    outline:2px solid var(--neon-blue-bright); outline-offset:-2px; border-radius:3px;
+  }
+  .faq-item__num{
+    font-size:14px; font-weight:600; color:var(--neon-blue-bright);
+    font-variant-numeric:tabular-nums;
+    transition:color .3s ease;
+  }
+  .faq-item__question{
+    font-size:17px; font-weight:600; letter-spacing:-.005em; line-height:1.4;
+    color:var(--text-primary);
+    transition:color .3s ease;
+  }
+  .faq-item__icon{
+    font-size:22px; font-weight:300; line-height:1;
+    color:var(--neon-blue-bright);
+    text-align:center;
+    transition:transform .35s var(--ease), color .3s ease;
+  }
+  .faq-item.is-open .faq-item__icon{transform:rotate(45deg);}
+  .faq-item__trigger:hover .faq-item__num{color:var(--neon-blue-soft);}
+  .faq-item__trigger:hover .faq-item__question{color:#fff;}
+
+  .faq-item__panel{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .4s var(--ease);
+  }
+  .faq-item.is-open .faq-item__panel{grid-template-rows:1fr;}
+  .faq-item__panel-inner{overflow:hidden;}
+  .faq-item__answer{
+    max-width:760px;
+    padding:0 32px 28px calc(44px + 20px);
+    font-size:15px; line-height:1.7;
+    color:var(--text-secondary);
+    opacity:0;
+    transition:opacity .3s ease;
+  }
+  .faq-item.is-open .faq-item__answer{opacity:1; transition:opacity .35s ease .12s;}
+
+  .faq__transition{
+    position:relative; z-index:1;
+    max-width:1180px; margin:80px auto 0;
+    text-align:center;
+  }
+  .faq__transition-eyebrow{color:var(--neon-blue-soft); margin-bottom:16px;}
+  .faq__transition .section-title{
+    font-size:clamp(1.8rem,3.2vw,2.4rem);
+    max-width:560px; margin-inline:auto;
+  }
+  .faq__transition-cta{margin-top:32px; display:flex; justify-content:center;}
+
+  @media (max-width:640px){
+    .faq-item__trigger{grid-template-columns:28px 1fr 22px; align-items:flex-start; gap:14px;}
+    .faq-item__icon{padding-top:2px;}
+    .faq-item__question{font-size:15.5px;}
+    .faq-item__answer{padding-left:calc(28px + 14px); padding-right:4px;}
+  }
+
+  /* ============ CTA FINAL ============ */
+  .cta-final{
+    background:radial-gradient(circle at 50% 100%, rgba(47,107,255,.30), var(--navy-deep) 40%, var(--black) 75%);
+    color:#fff; text-align:center;
+  }
+  .cta-final .wrap{display:flex; flex-direction:column; align-items:center;}
+  .cta-final .section-title{
+    font-size:clamp(2.2rem,5vw,3.6rem);
+    max-width:680px; text-align:center; margin-inline:auto;
+  }
+  .cta-final .section-title span{color:var(--neon-blue-bright);}
+  .cta-final .lede{margin-inline:auto; text-align:center; position:relative; z-index:1;}
+  .cta-final__cta{margin-top:40px; position:relative; z-index:1;}
+
+  /* ============ FOOTER ============ */
+  footer{background:var(--black); color:var(--text-secondary); padding-block:40px;}
+  footer .wrap{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; font-size:12px;}
+  footer a{text-decoration:none; color:inherit;}
+  footer nav{display:flex; gap:28px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+      scroll-behavior:auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="navbar__inner">
+    <a href="#" class="navbar__brand">ZARIEL</a>
+    <ul class="navbar__links">
+      <li><a href="#metodo">Método</a></li>
+      <li><a href="#resultados">Resultados</a></li>
+      <li><a href="#conteudo">Conteúdo</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a href="https://pay.cakto.com.br/3d7vm7s" class="navbar__cta" target="_blank" rel="noopener">Entrar no GLOW M7</a>
+    <button class="navbar__toggle" id="navToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu__head">
+    <span class="mobile-menu__brand">ZARIEL</span>
+    <button class="mobile-menu__close" id="mobileMenuClose" type="button" aria-label="Fechar menu">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+  </div>
+  <ul class="mobile-menu__links">
+    <li><a href="#metodo">Método</a></li>
+    <li><a href="#resultados">Resultados</a></li>
+    <li><a href="#conteudo">Conteúdo</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="https://pay.cakto.com.br/3d7vm7s" class="premium-cta mobile-menu__cta" target="_blank" rel="noopener">
+    <span class="premium-cta__label">ENTRAR NO GLOW M7</span>
+    <span class="premium-cta__icon" aria-hidden="true">↗</span>
+  </a>
+</div>
+
+<!-- ============ HERO — TIPOGRÁFICO / NEON ============ -->
+<header class="hero">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-ambient" aria-hidden="true">
+    <span class="hero-particle" style="top:16%; left:10%; animation-delay:0s;"></span>
+    <span class="hero-particle" style="top:24%; left:22%; width:3px; height:3px; animation-delay:1.4s;"></span>
+    <span class="hero-particle" style="top:12%; left:38%; animation-delay:2.6s;"></span>
+    <span class="hero-particle" style="top:30%; left:52%; width:3px; height:3px; animation-delay:.8s;"></span>
+    <span class="hero-particle" style="top:18%; left:68%; animation-delay:3.4s;"></span>
+    <span class="hero-particle" style="top:26%; left:82%; width:3px; height:3px; animation-delay:1.9s;"></span>
+    <span class="hero-particle" style="top:40%; left:6%; animation-delay:2.1s;"></span>
+    <span class="hero-particle" style="top:60%; left:15%; width:3px; height:3px; animation-delay:4s;"></span>
+    <span class="hero-particle" style="top:66%; left:34%; animation-delay:.4s;"></span>
+    <span class="hero-particle" style="top:72%; left:58%; width:3px; height:3px; animation-delay:2.9s;"></span>
+    <span class="hero-particle" style="top:64%; left:76%; animation-delay:1.1s;"></span>
+    <span class="hero-particle" style="top:58%; left:90%; width:3px; height:3px; animation-delay:3.8s;"></span>
+  </div>
+  <div class="hero-glow" aria-hidden="true"></div>
+
+  <div class="hero-content wrap">
+    <div class="hero-eyebrow reveal-fade" data-delay="0">ZARIEL</div>
+
+    <div class="hero-announcement reveal-fade" data-delay="180">
+      <span>GLOW M7 • MÉTODO DE TRANSFORMAÇÃO PESSOAL</span>
+    </div>
+
+    <div class="hero-product-name" id="glowm7Name">
+      <span>GLOW </span><span class="hero-product-accent">M7</span>
+    </div>
+
+    <h1 class="hero-title">
+      <span class="hero-line-mask"><span class="hero-line">O método para construir</span></span>
+      <span class="hero-line-mask"><span class="hero-line hero-line-accent">a sua melhor versão.</span></span>
+    </h1>
+
+    <p class="hero-description reveal-fade" data-delay="1700">
+      Um sistema completo de estética, imagem e presença para elevar sua aparência, fortalecer sua confiança e transformar a forma como você se vê — e como o mundo percebe você.
+    </p>
+
+    <div class="hero-cta reveal-fade" data-delay="1950">
+      <a href="https://pay.cakto.com.br/3d7vm7s" class="hero-primary-cta" target="_blank" rel="noopener">
+        <span>CONHECER O MÉTODO</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ MÉTODO — INTRO ============ -->
+<section class="method-intro" id="metodo">
+  <div class="section-ghost-title" aria-hidden="true">GLOW M7</div>
+  <div class="wrap">
+    <div class="eyebrow reveal-line">O MÉTODO GLOW M7</div>
+    <h2 class="section-title reveal-line">Transformação não acontece por acaso.</h2>
+    <p class="lede reveal-fade">
+      O GLOW M7 organiza os pilares da sua evolução — pele, estrutura, cabelo, estilo e presença — em um método claro, prático e estratégico para acelerar sua transformação sem achismos.
+    </p>
+  </div>
+</section>
+
+<!-- ============ VÍDEO 9:16 ============ -->
+<section class="video-section">
+  <div class="section-ghost-title" aria-hidden="true" style="left:20%;">M7</div>
+  <div class="wrap">
+    <div class="video-section__copy">
+      <div class="eyebrow reveal-line">CONHEÇA O MÉTODO</div>
+      <h2 class="section-title reveal-line" style="font-size:clamp(2rem,4vw,3rem); margin-top:18px;">
+        Você não precisa de mais dicas.<br>Precisa de um <span style="color:var(--neon-blue-bright);">método</span>.
+      </h2>
+      <p class="lede reveal-fade" style="margin-top:22px;">
+        O GLOW M7 organiza tudo o que realmente importa — pele, estrutura, cabelo e presença — em uma sequência única, sem achismo e sem enrolação.
+      </p>
+      <div class="video-section__cta reveal-fade">
+        <a href="https://pay.cakto.com.br/3d7vm7s" class="premium-cta" target="_blank" rel="noopener">
+          <span class="premium-cta__label">QUERO ENTRAR PARA O GLOW M7</span>
+          <span class="premium-cta__icon" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="reveal-fade">
+      <div class="video-container">
+        <div class="video-container__mark" aria-hidden="true">M7</div>
+        <iframe
+          class="video-player"
+          src="https://www.youtube.com/embed/-85h9lTqm3Y"
+          title="GLOW M7 — vídeo"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+          loading="lazy"
+          frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTEÚDO / MÓDULOS ============ -->
+<section class="modules" id="conteudo">
+  <div class="wrap">
+    <div class="modules__head">
+      <h2 class="section-title reveal-line" style="font-size:clamp(2.1rem,4.2vw,3.1rem);">
+        Tudo que você precisa para construir sua evolução.
+      </h2>
+    </div>
+
+    <div class="modules__list">
+      <div class="module-row">
+        <div class="module-row__num">01</div>
+        <div>
+          <div class="module-row__title">PELE</div>
+          <p class="module-row__text">Como usar o sol de forma estratégica, os suplementos certos e o protocolo certo para transformar sua pele em semanas — sem achismo.</p>
+        </div>
+      </div>
+      <div class="module-row">
+        <div class="module-row__num">02</div>
+        <div>
+          <div class="module-row__title">ROSTO</div>
+          <p class="module-row__text">Técnicas que definem mandíbula, afinam o rosto e melhoram a simetria, com resultados visíveis já nas primeiras semanas.</p>
+        </div>
+      </div>
+      <div class="module-row">
+        <div class="module-row__num">03</div>
+        <div>
+          <div class="module-row__title">ALTURA</div>
+          <p class="module-row__text">Para quem ainda está em fase de desenvolvimento: o protocolo completo para aproveitar cada centímetro que a genética permite.</p>
+        </div>
+      </div>
+      <div class="module-row">
+        <div class="module-row__num">04</div>
+        <div>
+          <div class="module-row__title">ESTRUTURA ÓSSEA</div>
+          <p class="module-row__text">O fator pouco discutido que define sua estrutura facial e corporal — e sustenta todo o resto do método.</p>
+        </div>
+      </div>
+      <div class="module-row">
+        <div class="module-row__num">05</div>
+        <div>
+          <div class="module-row__title">CABELO</div>
+          <p class="module-row__text">Do crescimento acelerado até o formato ideal — o cabelo certo muda completamente como você é percebido.</p>
+        </div>
+      </div>
+      <div class="module-row">
+        <div class="module-row__num">06</div>
+        <div>
+          <div class="module-row__title">MENTALIDADE</div>
+          <p class="module-row__text">A rotina e a mentalidade que sustentam os resultados a longo prazo. Sem isso, nada do resto dura.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-cta reveal-fade">
+      <a href="https://pay.cakto.com.br/3d7vm7s" class="premium-cta" target="_blank" rel="noopener">
+        <span class="premium-cta__label">QUERO ACESSAR O MÉTODO COMPLETO</span>
+        <span class="premium-cta__icon" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTADOS ============ -->
+<section class="results" id="resultados">
+  <div class="section-ghost-title" aria-hidden="true">GLOW M7</div>
+  <div class="wrap">
+    <div class="results__head">
+      <div class="eyebrow reveal-line">RESULTADOS GLOW M7</div>
+      <h2 class="section-title reveal-line" style="font-size:clamp(2.1rem,4.2vw,3.1rem); margin-top:16px;">
+        Resultados que não precisam de explicação.
+      </h2>
+    </div>
+
+    <div class="results-grid">
+      <figure class="transformation reveal-fade">
+        <div class="transformation__media">
+          <img src="assets/results/01-transformacao.jpg" alt="Transformação 01 — antes e depois" loading="lazy" decoding="async" fetchpriority="low"
+               onerror="this.style.display='none'; this.parentElement.querySelector('.transformation__placeholder').style.display='flex';">
+          <div class="transformation__placeholder">[ ANTES / DEPOIS — assets/results/01 ]</div>
+        </div>
+        <div class="transformation__caption">Aluno <span>01</span></div>
+      </figure>
+
+      <figure class="transformation reveal-fade">
+        <div class="transformation__media">
+          <img src="assets/results/02-transformacao.jpg" alt="Transformação 02 — antes e depois" loading="lazy" decoding="async" fetchpriority="low"
+               onerror="this.style.display='none'; this.parentElement.querySelector('.transformation__placeholder').style.display='flex';">
+          <div class="transformation__placeholder">[ ANTES / DEPOIS — assets/results/02 ]</div>
+        </div>
+        <div class="transformation__caption">Aluno <span>02</span></div>
+      </figure>
+
+      <figure class="transformation reveal-fade">
+        <div class="transformation__media">
+          <img src="assets/results/03-transformacao.jpg" alt="Transformação 03 — antes e depois" loading="lazy" decoding="async" fetchpriority="low"
+               onerror="this.style.display='none'; this.parentElement.querySelector('.transformation__placeholder').style.display='flex';">
+          <div class="transformation__placeholder">[ ANTES / DEPOIS — assets/results/03 ]</div>
+        </div>
+        <div class="transformation__caption">Aluno <span>03</span></div>
+      </figure>
+    </div>
+
+    <div class="section-cta reveal-fade">
+      <a href="https://pay.cakto.com.br/3d7vm7s" class="premium-cta" target="_blank" rel="noopener">
+        <span class="premium-cta__label">QUERO OS MESMOS RESULTADOS</span>
+        <span class="premium-cta__icon" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROBLEMA ============ -->
+<section class="problem">
+  <div class="wrap">
+    <div class="problem__head">
+      <h2 class="section-title reveal-line" style="font-size:clamp(2.1rem,4.2vw,3.1rem);">
+        Você até tenta melhorar.<br>Mas ainda não tem um método.
+      </h2>
+    </div>
+
+    <div class="problem-lines">
+      <div class="problem-line">
+        <span class="problem-line__num">01</span>
+        <span>Você compra produtos sem saber se fazem sentido para você.</span>
+      </div>
+      <div class="problem-line">
+        <span class="problem-line__num">02</span>
+        <span>Você tenta copiar estilos sem entender o que favorece sua aparência.</span>
+      </div>
+      <div class="problem-line">
+        <span class="problem-line__num">03</span>
+        <span>Você melhora partes isoladas sem construir uma imagem completa.</span>
+      </div>
+      <div class="problem-line">
+        <span class="problem-line__num">04</span>
+        <span>Você sabe que poderia evoluir, mas não sabe qual deve ser o próximo passo.</span>
+      </div>
+    </div>
+
+    <div class="section-cta reveal-fade">
+      <a href="https://pay.cakto.com.br/3d7vm7s" class="premium-cta" target="_blank" rel="noopener">
+        <span class="premium-cta__label">QUERO SAIR DESSE CICLO</span>
+        <span class="premium-cta__icon" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENTOR ============ -->
+<section class="mentor">
+  <div class="wrap">
+    <div class="mentor__media reveal-fade">
+      <img src="assets/mentor/mentor-about.jpg" alt="Mentor GLOW M7" loading="lazy" decoding="async" fetchpriority="low"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="mentor__placeholder" style="display:none;">[ FOTOGRAFIA DO MENTOR — assets/mentor/mentor-about.jpg ]</div>
+    </div>
+
+    <div class="mentor__copy">
+      <h2 class="section-title reveal-line">
+        Eu não construí o GLOW M7 para ensinar você a parecer comigo.
+      </h2>
+      <p class="mentor__lead reveal-fade">Construí para mostrar até onde você pode chegar.</p>
+
+      <!-- Troque os href="#" abaixo pelos links reais de cada rede social. -->
+      <div class="mentor__social reveal-fade">
+        <a href="https://www.instagram.com/zarielm7?igsh=MXhoZ2prZWU0NmVmNw%3D%3D&utm_source=qr" class="mentor__social-link" aria-label="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
+          <span>Instagram</span>
+        </a>
+        <a href="https://www.tiktok.com/@zarielmp7?_r=1&_t=ZS-98zW7UfQoAK" class="mentor__social-link" aria-label="TikTok" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3v10.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.4 2.2 2 3.9 4 4.3"/></svg>
+          <span>TikTok</span>
+        </a>
+        <a href="https://youtube.com/@zarielm7?si=ciaqyaS2JGw2kspW" class="mentor__social-link" aria-label="YouTube" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="6" width="19" height="12" rx="4"/><path d="M10.5 9.5l5 2.5-5 2.5z" fill="currentColor" stroke="none"/></svg>
+          <span>YouTube</span>
+        </a>
+        <a href="https://k.kwai.com/u/@ZarielM7/Z6C4yLVn" class="mentor__social-link" aria-label="Kwai" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h6l3 4.5L16 4h4l-6.5 8L20 20h-6l-3-4.5L8 20H4l6.5-8z"/></svg>
+          <span>Kwai</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEPOIMENTOS — 100% TEXTUAL ============ -->
+<!-- Textos abaixo (ver array `testimonials` no <script> no fim do arquivo) são PLACEHOLDERS de desenvolvimento e devem ser substituídos por depoimentos reais antes da publicação. -->
+<section class="testimonials">
+  <div class="wrap">
+    <div class="testimonials__head">
+      <div class="eyebrow reveal-line">DEPOIMENTOS</div>
+      <h2 class="section-title reveal-line" style="font-size:clamp(2.1rem,4.2vw,3.1rem);">
+        De quem decidiu levar a própria evolução a sério.
+      </h2>
+      <p class="lede reveal-fade">Experiências com o método GLOW M7.</p>
+    </div>
+
+    <div class="testimonial-grid" id="testimonialGrid"></div>
+  </div>
+</section>
+
+<!-- ============ GARANTIA ============ -->
+<section class="guarantee" id="garantia">
+  <div class="wrap guarantee__grid">
+    <div class="guarantee__copy">
+      <div class="eyebrow reveal-line">GARANTIA GLOW M7</div>
+      <h2 class="section-title reveal-line">Você tem <span>30 dias</span> para colocar o método à prova.</h2>
+
+      <div class="guarantee__text reveal-fade">
+        <p>Entre no GLOW M7, conheça o método e aplique as orientações propostas durante os primeiros 30 dias.</p>
+        <p>Acreditamos que uma transformação consistente começa com direção e aplicação. Por isso, queremos que você tenha segurança para experimentar o método na prática.</p>
+        <p>Se, dentro desse período, você cumprir os critérios estabelecidos para a garantia, aplicar o método conforme orientado e não perceber os resultados previstos nos termos da oferta, poderá solicitar o reembolso de acordo com as condições da garantia.</p>
+      </div>
+
+      <!-- TODO: DEFINIR TERMOS E CRITÉRIOS OBJETIVOS DA GARANTIA ANTES DA PUBLICAÇÃO. -->
+      <p class="guarantee__microcopy reveal-fade">Consulte os termos e critérios da garantia para verificar as condições, o prazo e o procedimento para solicitação de reembolso.</p>
+
+      <div class="guarantee__cta reveal-fade">
+        <a href="https://pay.cakto.com.br/3d7vm7s" class="premium-cta" target="_blank" rel="noopener">
+          <span class="premium-cta__label">QUERO ENTRAR PARA O GLOW M7</span>
+          <span class="premium-cta__icon" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="guarantee__stat reveal-fade">
+      <div class="guarantee__stat-glow" aria-hidden="true"></div>
+      <div class="guarantee__stat-number">30</div>
+      <div class="guarantee__stat-label">DIAS DE GARANTIA</div>
+      <p class="guarantee__stat-note">Aplicou conforme os critérios e a garantia se aplica ao seu caso? Solicite o reembolso dentro do prazo estabelecido.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ — DÚVIDAS FREQUENTES ============ -->
+<section class="faq" id="faq">
+  <div class="section-ghost-title" aria-hidden="true" style="color:rgba(79,131,255,.025); top:60%;">GLOW M7</div>
+  <div class="faq__glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="faq__head">
+      <div class="eyebrow reveal-line">GLOW M7 • DÚVIDAS FREQUENTES</div>
+      <h2 class="section-title reveal-line">Antes de começar, tire suas <span>dúvidas.</span></h2>
+      <p class="lede reveal-fade">Tudo o que você precisa saber sobre o método, o acesso e a aplicação do GLOW M7.</p>
+    </div>
+
+    <div class="faq-list" id="faqList"></div>
+
+    <div class="faq__transition">
+      <div class="eyebrow faq__transition-eyebrow reveal-fade">PRONTO PARA COMEÇAR?</div>
+      <h3 class="section-title reveal-line">Você já sabe como funciona.<br>Agora é hora de aplicar.</h3>
+      <div class="faq__transition-cta reveal-fade">
+        <a href="https://pay.cakto.com.br/3d7vm7s" class="premium-cta" target="_blank" rel="noopener">
+          <span class="premium-cta__label">ENTRAR PARA O GLOW M7</span>
+          <span class="premium-cta__icon" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FINAL ============ -->
+<section class="cta-final" id="cta-final">
+  <div class="section-ghost-title" aria-hidden="true">GLOW M7</div>
+  <div class="wrap">
+    <h2 class="section-title reveal-line">SUA PRÓXIMA VERSÃO<br>COMEÇA NO <span>GLOW M7.</span></h2>
+    <p class="lede reveal-fade">O GLOW M7 é o método completo para quem decidiu parar de tentar sozinho.</p>
+    <div class="cta-final__cta reveal-fade">
+      <a href="https://pay.cakto.com.br/3d7vm7s" class="premium-cta" target="_blank" rel="noopener">
+        <span class="premium-cta__label">QUERO ENTRAR PARA O GLOW M7</span>
+        <span class="premium-cta__icon" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 ZARIEL. Todos os direitos reservados.</span>
+    <nav>
+      <a href="#">Termos de Uso</a>
+      <a href="#">Política de Privacidade</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  // navbar on scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // mobile menu (hamburger drawer)
+  const navToggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileMenuClose = document.getElementById('mobileMenuClose');
+
+  function openMobileMenu(){
+    mobileMenu.classList.add('is-open');
+    mobileMenu.setAttribute('aria-hidden', 'false');
+    navToggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileMenu(){
+    mobileMenu.classList.remove('is-open');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    navToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  navToggle.addEventListener('click', () => {
+    mobileMenu.classList.contains('is-open') ? closeMobileMenu() : openMobileMenu();
+  });
+  mobileMenuClose.addEventListener('click', closeMobileMenu);
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileMenu));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) closeMobileMenu();
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900 && mobileMenu.classList.contains('is-open')) closeMobileMenu();
+  });
+
+  // depoimentos — textos abaixo são PLACEHOLDERS de desenvolvimento,
+  // substituir por depoimentos reais antes da publicação. Sem image/avatar/photo de propósito.
+  const testimonials = [
+    {
+      id: "01",
+      quote: "Comecei buscando melhorar minha aparência, mas percebi que o processo era muito maior. Quando você organiza cabelo, pele, estilo e presença dentro de uma mesma estratégia, tudo começa a conversar.",
+      author: "DEPOIMENTO PLACEHOLDER 01"
+    },
+    {
+      id: "02",
+      quote: "O que mais gostei foi parar de testar coisas aleatórias. Ter uma direção clara tornou muito mais fácil entender o que realmente fazia sentido melhorar na minha imagem.",
+      author: "DEPOIMENTO PLACEHOLDER 02"
+    },
+    {
+      id: "03",
+      quote: "Eu achava que glow up era simplesmente ficar mais bonito. O método me fez enxergar proporção, estilo, apresentação e presença de uma forma completamente diferente.",
+      author: "DEPOIMENTO PLACEHOLDER 03"
+    },
+    {
+      id: "04",
+      quote: "A maior mudança foi começar a olhar para minha imagem como um conjunto. Pequenos ajustes passaram a fazer muito mais sentido quando deixaram de ser feitos de forma isolada.",
+      author: "DEPOIMENTO PLACEHOLDER 04"
+    },
+    {
+      id: "05",
+      quote: "O diferencial para mim foi a estrutura. Em vez de consumir dezenas de conteúdos e continuar sem saber por onde começar, passei a enxergar uma sequência lógica de evolução.",
+      author: "DEPOIMENTO PLACEHOLDER 05"
+    },
+    {
+      id: "06",
+      quote: "Não queria copiar a estética de outra pessoa. Queria descobrir o que funcionava para mim. Essa mudança de perspectiva foi provavelmente a parte mais importante do processo.",
+      author: "DEPOIMENTO PLACEHOLDER 06"
+    }
+  ];
+
+  const testimonialGrid = document.getElementById('testimonialGrid');
+  testimonialGrid.innerHTML = testimonials.map((t, i) => `
+    <article class="testimonial-card reveal-fade" data-delay="${i * 110}">
+      <div class="testimonial-card__num">${t.id}</div>
+      <p class="testimonial-card__quote">"${t.quote}"</p>
+      <span class="testimonial-card__author">${t.author}</span>
+    </article>
+  `).join('');
+
+  // FAQ — accordion
+  const faqs = [
+    {
+      question: "Como vou acessar o GLOW M7 depois da compra?",
+      answer: "Após a confirmação da compra, os dados de acesso ao GLOW M7 serão enviados para o mesmo e-mail informado no momento do pagamento. Por isso, é importante utilizar um endereço de e-mail válido e ao qual você tenha acesso. A liberação é feita após a confirmação do pagamento pela plataforma."
+    },
+    {
+      question: "Como o método GLOW M7 funciona na prática?",
+      answer: "O GLOW M7 foi estruturado para transformar conhecimento em aplicação. Ao longo do curso, você terá acesso a videoaulas, exercícios e orientações práticas, além da construção de hábitos voltados à evolução da sua imagem, estética e presença. A proposta é oferecer uma sequência clara de aplicação, evitando mudanças aleatórias e ajudando você a direcionar seus esforços para os aspectos que realmente fazem sentido para a sua evolução."
+    },
+    {
+      question: "Em quanto tempo posso perceber mudanças?",
+      answer: "O ritmo de evolução varia de acordo com o ponto de partida, a rotina e, principalmente, a consistência de cada aluno. Algumas mudanças de apresentação, estilo e hábitos podem ser percebidas mais rapidamente, enquanto outras exigem continuidade. O objetivo do GLOW M7 é fornecer uma estrutura prática para que você evolua de forma consistente, sem depender de tentativas aleatórias."
+    },
+    {
+      question: "Preciso já entender sobre estética, autocuidado ou construção de imagem?",
+      answer: "Não. O método foi organizado para que você consiga compreender o processo mesmo começando sem conhecimento prévio sobre estética, estilo ou construção de imagem. O conteúdo apresenta uma direção estruturada para que você saiba o que observar, o que priorizar e como aplicar cada etapa à sua realidade."
+    },
+    {
+      question: "O GLOW M7 também pode ser aplicado por mulheres?",
+      answer: "Sim. O GLOW M7 também pode ser aplicado por mulheres. Embora parte da comunicação e da identidade visual do método tenha uma presença predominantemente masculina, os princípios ensinados não são exclusivos para homens.\n\nOs fundamentos de estética, autocuidado, construção de imagem, estilo, hábitos e presença podem ser adaptados e aplicados por mulheres de acordo com suas próprias características, objetivos e identidade.\n\nA proposta do GLOW M7 não é estabelecer um único padrão de aparência, mas apresentar princípios e estratégias que ajudem cada pessoa a identificar seus pontos de evolução e desenvolver uma imagem mais cuidada, coerente e intencional."
+    },
+    {
+      question: "Vou precisar gastar muito dinheiro para aplicar o método?",
+      answer: "Não necessariamente. O foco do GLOW M7 não é incentivar compras indiscriminadas, mas ajudar você a tomar decisões melhores sobre a própria imagem. A aplicação pode envolver desde mudanças de hábitos e apresentação até escolhas mais estratégicas de estilo e autocuidado. Cada aluno pode adaptar o processo à própria realidade e ao orçamento disponível."
+    },
+    {
+      question: "Preciso mudar completamente meu estilo?",
+      answer: "Não. O objetivo não é apagar sua identidade ou transformar você em uma cópia de outra pessoa. O GLOW M7 busca ajudar você a identificar pontos de melhoria e construir uma versão mais refinada e coerente da sua própria imagem."
+    },
+    {
+      question: "E se eu não souber por onde começar?",
+      answer: "Esse é justamente um dos objetivos do método. Em vez de consumir informações isoladas e tentar decidir sozinho o que fazer primeiro, você terá uma estrutura organizada para entender os diferentes pilares da sua imagem e avançar de forma mais lógica."
+    },
+    {
+      question: "Consigo aplicar o GLOW M7 mesmo tendo uma rotina corrida?",
+      answer: "Sim. A proposta é integrar os aprendizados à sua rotina de forma progressiva. Você poderá assistir às aulas e aplicar as orientações de acordo com a sua disponibilidade, transformando determinados cuidados e práticas em hábitos consistentes ao longo do processo."
+    },
+    {
+      question: "Por quanto tempo terei acesso ao conteúdo?",
+      answer: "Consulte as condições apresentadas na página de pagamento para verificar o período de acesso correspondente à sua compra."
+    },
+    {
+      question: "Posso assistir pelo celular?",
+      answer: "Sim. O conteúdo pode ser acompanhado por dispositivos compatíveis com a plataforma de acesso, permitindo que você estude de forma mais conveniente pelo celular ou computador."
+    },
+    {
+      question: "Esqueci ou não recebi meu acesso. O que devo fazer?",
+      answer: "Primeiro, verifique a caixa de entrada, a pasta de spam e a aba de promoções do e-mail utilizado na compra. Caso ainda não encontre as informações de acesso, utilize o canal de suporte informado após a compra para solicitar ajuda."
+    }
+  ];
+
+  const faqList = document.getElementById('faqList');
+  faqList.innerHTML = faqs.map((f, i) => {
+    const n = String(i + 1).padStart(2, '0');
+    return `
+    <div class="faq-item reveal-fade" data-delay="${i * 70}">
+      <button class="faq-item__trigger" id="faqTrigger${i}" aria-expanded="false" aria-controls="faqPanel${i}">
+        <span class="faq-item__num">${n}</span>
+        <span class="faq-item__question">${f.question}</span>
+        <span class="faq-item__icon" aria-hidden="true">+</span>
+      </button>
+      <div class="faq-item__panel" id="faqPanel${i}" role="region" aria-labelledby="faqTrigger${i}">
+        <div class="faq-item__panel-inner">
+          ${f.answer.split('\n\n').map(p => `<p class="faq-item__answer">${p}</p>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  faqList.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.faq-item__trigger');
+    if (!trigger) return;
+    const item = trigger.closest('.faq-item');
+    const isOpen = item.classList.contains('is-open');
+    faqList.querySelectorAll('.faq-item.is-open').forEach(open => {
+      open.classList.remove('is-open');
+      open.querySelector('.faq-item__trigger').setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) {
+      item.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  // reveal on scroll, staggered (also drives the GLOW M7 entrance)
+  const revealables = document.querySelectorAll('.reveal-line, .reveal-fade, #glowm7Name');
+  const groups = new Map();
+  revealables.forEach(el => {
+    const parent = el.parentElement;
+    if (!groups.has(parent)) groups.set(parent, []);
+    groups.get(parent).push(el);
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const siblings = groups.get(el.parentElement) || [el];
+      const index = siblings.indexOf(el);
+      const delay = el.hasAttribute('data-delay') ? Number(el.getAttribute('data-delay')) : Math.max(0, index) * 110;
+      setTimeout(() => el.classList.add('is-visible'), delay);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -60px 0px' });
+
+  document.getElementById('glowm7Name').setAttribute('data-delay', '480');
+  revealables.forEach(el => io.observe(el));
+
+  // check zariel banner watermark for CTA final section
+  (function(){
+    const test = new Image();
+    test.onload = () => {
+      document.querySelector('.cta-final').style.backgroundImage =
+        'radial-gradient(circle at 50% 100%, rgba(47,107,255,.30), rgba(6,18,37,.85) 40%, rgba(2,3,7,.92) 75%), url("assets/brand/zariel-banner.jpg")';
+      document.querySelector('.cta-final').style.backgroundSize = 'cover';
+      document.querySelector('.cta-final').style.backgroundPosition = 'center';
+    };
+    test.src = 'assets/brand/zariel-banner.jpg';
+  })();
+</script>
+
+</body>
+</html>
