@@ -4,3 +4,4 @@ ChatGPT Image*.png
 antes e depois *.JPG
 .DS_Store
 .vercel
+.env*
