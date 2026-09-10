@@ -5,18 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZARIEL — GLOW M7</title>
 <meta name="description" content="GLOW M7 por ZARIEL — método de transformação, imagem e presença masculina.">
-<!-- Meta Pixel Code -->
+<!-- Meta Pixel Code — bootstrap imediato, fbevents.js diferido (não compete com a Hero) -->
 <script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];
+f._loadFbevents=function(){if(f._fbLoaded)return;f._fbLoaded=1;
+t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s);}}(window,document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '28129194843358322');
-fbq('track', 'PageView');
+fbq('init','28129194843358322');
+fbq('track','PageView');
+(function(){var evs=['scroll','pointerdown','keydown','touchstart'];
+var go=function(){window._loadFbevents&&window._loadFbevents();
+evs.forEach(function(x){removeEventListener(x,go);});};
+evs.forEach(function(x){addEventListener(x,go,{passive:true,once:true});});
+setTimeout(go,3500);})();
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
@@ -61,9 +65,11 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="assets/banner.jpg" fetchpriority="high" media="(min-width:768px)">
-<link rel="preload" as="image" href="assets/bannercelular.jpg" fetchpriority="high" media="(max-width:767px)">
+<!-- Google Fonts sem bloquear a renderização; -apple-system aparece na hora e troca para Manrope -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
+<link rel="preload" as="image" href="assets/banner.webp" fetchpriority="high" media="(min-width:768px)">
+<link rel="preload" as="image" href="assets/bannercelular.webp" fetchpriority="high" media="(max-width:767px)">
 <style>
   :root{
     --black:#020307;
@@ -292,9 +298,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   @media (max-width:380px){
     .shiny-cta{ padding:1rem 1.3rem; font-size:.78rem; letter-spacing:.05em; }
   }
-  @media (prefers-reduced-motion:reduce){
-    .shiny-cta::before{ animation:none; }
-  }
+  /* nota: reduced-motion tratado no bloco consolidado no fim do <style> (mantém o brilho, só mais lento) */
 
   /* navbar */
   .navbar{
@@ -473,7 +477,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     text-shadow:0 2px 26px rgba(0,0,0,.6), 0 1px 4px rgba(0,0,0,.45);
     overflow-wrap:break-word;
   }
-  .newhero__title span{display:block;}
+  .newhero__title > span{display:block;}
   .newhero__title-em{
     color:#4f7dff;
     white-space:nowrap;
@@ -516,11 +520,11 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   }
 
   @keyframes newheroRise{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
-  .newhero__title span,
+  .newhero__title > span,
   .newhero__subtitle{animation:newheroRise .8s var(--ease) both;}
-  .newhero__title span:nth-child(1){animation-delay:.10s;}
-  .newhero__title span:nth-child(2){animation-delay:.24s;}
-  .newhero__title span:nth-child(3){animation-delay:.38s;}
+  .newhero__title > span:nth-child(1){animation-delay:.10s;}
+  .newhero__title > span:nth-child(2){animation-delay:.24s;}
+  .newhero__title > span:nth-child(3){animation-delay:.38s;}
   .newhero__subtitle{animation-delay:.54s;}
 
   @media (max-width:1024px){
@@ -553,7 +557,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
       overflow-wrap:break-word;
       animation:newheroRise .8s var(--ease) both;
     }
-    .newhero__title span{display:inline; animation:none;}
+    .newhero__title > span{display:inline; animation:none;}
     .newhero__subtitle{
       font-size:clamp(1rem,4.1vw,1.12rem);
       max-width:42ch;
@@ -567,14 +571,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .newhero__subtitle{font-size:.98rem;}
   }
   @media (prefers-reduced-motion:reduce){
-    .newhero__title-em{
-      -webkit-text-fill-color:#4f7dff;
-      color:#4f7dff;
-      background-image:none;
-      background-color:transparent;
-      animation:none;
-    }
-    .newhero__title span,
+    .newhero__title > span,
     .newhero__subtitle,
     .newhero__cta{animation:none; opacity:1; transform:none;}
   }
@@ -609,6 +606,24 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     position:relative; z-index:1;
     width:100%; height:100%; border:0; display:block; background:var(--black);
   }
+  .video-facade{
+    position:absolute; inset:0; z-index:1;
+    width:100%; height:100%; margin:0; padding:0; border:0;
+    background:var(--black); cursor:pointer; display:block; overflow:hidden;
+  }
+  .video-facade__thumb{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; opacity:.7;
+    transition:opacity .3s ease, transform .5s var(--ease);
+  }
+  .video-facade__play{
+    position:absolute; left:50%; top:50%; transform:translate3d(-50%,-50%,0);
+    display:grid; place-items:center;
+    transition:transform .3s var(--ease);
+    filter:drop-shadow(0 8px 20px rgba(0,0,0,.55));
+  }
+  .video-facade:is(:hover,:focus-visible) .video-facade__thumb{ opacity:.85; transform:scale(1.03); }
+  .video-facade:is(:hover,:focus-visible) .video-facade__play{ transform:translate3d(-50%,-50%,0) scale(1.08); }
   @media (max-width:960px){
     .video-section .wrap{grid-template-columns:1fr; gap:48px; text-align:left;}
     .video-container{width:min(100%,420px);}
@@ -694,7 +709,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   }
 
   /* ============ RESULTS ============ */
-  .results{background:var(--navy-deep);}
+  .results{background:var(--navy-deep); content-visibility:auto; contain-intrinsic-size:1px 1600px;}
   .results__head{margin-bottom:56px;}
   .transformation{position:relative;}
   .transformation__media{
@@ -734,7 +749,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   }
 
   /* ============ MENTOR ============ */
-  .mentor{background:var(--black);}
+  .mentor{background:var(--black); content-visibility:auto; contain-intrinsic-size:1px 900px;}
   .mentor .wrap{display:grid; grid-template-columns:44% 1fr; gap:64px; align-items:center;}
   .mentor__media{
     position:relative; aspect-ratio:4/5; background:#0A0F1C; overflow:hidden; border-radius:4px;
@@ -799,7 +814,11 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   }
   .tm__group--left  { animation:tm-left  var(--tm-duration) linear infinite; }
   .tm__group--right { animation:tm-right var(--tm-duration) linear infinite; }
-  .tm__row:hover .tm__group{ animation-play-state:paused; }
+  /* pausa no hover SÓ em dispositivos com mouse real — no touch o :hover "gruda" e trava o marquee */
+  @media (hover:hover) and (pointer:fine){
+    .tm__row:hover .tm__group{ animation-play-state:paused; }
+  }
+  .tm__group--left, .tm__group--right{ animation-play-state:running; }
   .tm__card{
     position:relative;
     display:flex; flex-direction:column; justify-content:space-between; gap:1rem;
@@ -848,12 +867,10 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .tm__quote{ font-size:.85rem; }
     .tm::before, .tm::after{ width:10%; }
   }
-  @media (prefers-reduced-motion:reduce){
-    .tm__group--left, .tm__group--right{ animation:none; }
-  }
+  /* reduced-motion do marquee: bloco consolidado no fim do <style> (continua rodando, bem devagar) */
 
   /* ============ GARANTIA ============ */
-  .guarantee{background:var(--navy); padding-block:clamp(64px,7vw,110px);}
+  .guarantee{background:var(--navy); padding-block:clamp(64px,7vw,110px); content-visibility:auto; contain-intrinsic-size:1px 700px;}
   .guarantee__grid{
     display:grid; grid-template-columns:1.15fr .85fr; gap:64px; align-items:center;
   }
@@ -898,7 +915,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   }
 
   /* ============ FAQ ============ */
-  .faq{background:var(--black-soft);}
+  .faq{background:var(--black-soft); content-visibility:auto; contain-intrinsic-size:1px 1500px;}
   .faq__glow{
     position:absolute; z-index:0;
     width:700px; height:700px; max-width:80vw;
@@ -997,6 +1014,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   .cta-final{
     background:radial-gradient(circle at 50% 100%, rgba(47,107,255,.30), var(--navy-deep) 40%, var(--black) 75%);
     color:#fff; text-align:center;
+    content-visibility:auto; contain-intrinsic-size:1px 620px;
   }
   .cta-final .wrap{display:flex; flex-direction:column; align-items:center;}
   .cta-final .section-title{
@@ -1014,12 +1032,19 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   footer nav{display:flex; gap:28px;}
 
   @media (prefers-reduced-motion: reduce){
-    *, *::before, *::after{
-      animation-duration:.01ms !important;
-      animation-iteration-count:1 !important;
-      transition-duration:.01ms !important;
-      scroll-behavior:auto !important;
+    /* NÃO congelar tudo: iOS Low Power Mode / "Reduzir movimento" ativam este media query.
+       Desligamos apenas entradas/deslizes (risco vestibular) e deixamos os efeitos
+       decorativos contínuos (marquee, brilho do botão, shimmer) rodando — mais lentos. */
+    *, *::before, *::after{ transition-duration:.08s !important; scroll-behavior:auto !important; }
+    .reveal-line, .reveal-fade,
+    .newhero__title > span, .newhero__subtitle, .newhero__cta,
+    .hero-line, .guarantee__stat.reveal-fade{
+      animation:none !important; opacity:1 !important; transform:none !important; filter:none !important;
     }
+    .tm__group--left, .tm__group--right{ animation-duration:90s !important; }
+    .shiny-cta::before{ animation-duration:16s !important; }
+    .newhero__title-em{ animation-duration:10s !important; }
+    .cf__caption.is-swap{ animation:none !important; }
   }
 </style>
 </head>
@@ -1062,7 +1087,9 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
 <!-- ============ HERO — CINEMATOGRÁFICA ============ -->
 <header class="newhero">
   <picture>
+    <source media="(max-width:767px)" type="image/webp" srcset="assets/bannercelular.webp">
     <source media="(max-width:767px)" srcset="assets/bannercelular.jpg">
+    <source type="image/webp" srcset="assets/banner.webp">
     <img class="newhero__img" src="assets/banner.jpg" alt="" aria-hidden="true"
          width="1916" height="821" fetchpriority="high" decoding="async"
          onerror="this.style.display='none'">
@@ -1110,15 +1137,18 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     <div class="reveal-fade">
       <div class="video-container">
         <div class="video-container__mark" aria-hidden="true">M7</div>
-        <iframe
-          class="video-player"
-          src="https://www.youtube.com/embed/-85h9lTqm3Y"
-          title="GLOW M7 — vídeo"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-          loading="lazy"
-          frameborder="0"></iframe>
+        <!-- Facade: só thumbnail + play. O player do YouTube (JS/cookies de terceiros) só carrega no clique. -->
+        <button type="button" class="video-facade" id="videoFacade" data-ytid="-85h9lTqm3Y"
+                aria-label="Assistir ao vídeo do GLOW M7">
+          <img class="video-facade__thumb" src="https://i.ytimg.com/vi/-85h9lTqm3Y/hqdefault.jpg"
+               alt="" loading="lazy" decoding="async" width="480" height="360">
+          <span class="video-facade__play" aria-hidden="true">
+            <svg viewBox="0 0 68 48" width="66" height="46">
+              <path d="M66.5 7.7c-.8-2.9-2.5-5.4-5.4-6.2C55.8.1 34 0 34 0S12.2.1 6.9 1.5C4 2.3 2.3 4.8 1.5 7.7.1 13 0 24 0 24s.1 11 1.5 16.3c.8 2.9 2.5 5.4 5.4 6.2C12.2 47.9 34 48 34 48s21.8-.1 27.1-1.5c2.9-.8 4.6-3.3 5.4-6.2C67.9 35 68 24 68 24s-.1-11-1.5-16.3z" fill="#1b1b1b" opacity=".82"/>
+              <path d="M45 24 27 14v20z" fill="#fff"/>
+            </svg>
+          </span>
+        </button>
       </div>
     </div>
   </div>
@@ -1137,27 +1167,27 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
       <div class="cf__viewport" tabindex="0">
         <div class="cf__track">
           <div class="cf__card" role="group" aria-roledescription="slide" aria-label="1 de 6" data-title="PELE">
-            <img src="assets/pele.jpg" alt="PELE" draggable="false" decoding="async"
+            <img src="assets/pele.webp" alt="PELE" draggable="false" loading="lazy" decoding="async"
                  onerror="this.closest('.cf__card').classList.add('cf__card--noimg')">
           </div>
           <div class="cf__card" role="group" aria-roledescription="slide" aria-label="2 de 6" data-title="ROSTO">
-            <img src="assets/rosto.jpg" alt="ROSTO" draggable="false" decoding="async"
+            <img src="assets/rosto.webp" alt="ROSTO" draggable="false" loading="lazy" decoding="async"
                  onerror="this.closest('.cf__card').classList.add('cf__card--noimg')">
           </div>
           <div class="cf__card" role="group" aria-roledescription="slide" aria-label="3 de 6" data-title="ALTURA">
-            <img src="assets/altura.jpg" alt="ALTURA" draggable="false" decoding="async"
+            <img src="assets/altura.webp" alt="ALTURA" draggable="false" loading="lazy" decoding="async"
                  onerror="this.closest('.cf__card').classList.add('cf__card--noimg')">
           </div>
           <div class="cf__card" role="group" aria-roledescription="slide" aria-label="4 de 6" data-title="ESTRUTURA ÓSSEA">
-            <img src="assets/estruturaossea.jpg" alt="ESTRUTURA ÓSSEA" draggable="false" decoding="async"
+            <img src="assets/estruturaossea.webp" alt="ESTRUTURA ÓSSEA" draggable="false" loading="lazy" decoding="async"
                  onerror="this.closest('.cf__card').classList.add('cf__card--noimg')">
           </div>
           <div class="cf__card" role="group" aria-roledescription="slide" aria-label="5 de 6" data-title="CABELO">
-            <img src="assets/cabelo.jpg" alt="CABELO" draggable="false" decoding="async"
+            <img src="assets/cabelo.webp" alt="CABELO" draggable="false" loading="lazy" decoding="async"
                  onerror="this.closest('.cf__card').classList.add('cf__card--noimg')">
           </div>
           <div class="cf__card" role="group" aria-roledescription="slide" aria-label="6 de 6" data-title="MENTALIDADE">
-            <img src="assets/mentalidade.jpg" alt="MENTALIDADE" draggable="false" decoding="async"
+            <img src="assets/mentalidade.webp" alt="MENTALIDADE" draggable="false" loading="lazy" decoding="async"
                  onerror="this.closest('.cf__card').classList.add('cf__card--noimg')">
           </div>
         </div>
@@ -1190,7 +1220,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     <div class="results-grid">
       <figure class="transformation reveal-fade">
         <div class="transformation__media">
-          <img src="assets/results/01-transformacao.jpg" alt="Transformação 01 — antes e depois" loading="lazy" decoding="async" fetchpriority="low"
+          <img src="assets/results/01-transformacao.webp" alt="Transformação 01 — antes e depois" loading="lazy" decoding="async" fetchpriority="low"
                onerror="this.style.display='none'; this.parentElement.querySelector('.transformation__placeholder').style.display='flex';">
           <div class="transformation__placeholder">[ ANTES / DEPOIS — assets/results/01 ]</div>
         </div>
@@ -1199,7 +1229,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
 
       <figure class="transformation reveal-fade">
         <div class="transformation__media">
-          <img src="assets/results/02-transformacao.jpg" alt="Transformação 02 — antes e depois" loading="lazy" decoding="async" fetchpriority="low"
+          <img src="assets/results/02-transformacao.webp" alt="Transformação 02 — antes e depois" loading="lazy" decoding="async" fetchpriority="low"
                onerror="this.style.display='none'; this.parentElement.querySelector('.transformation__placeholder').style.display='flex';">
           <div class="transformation__placeholder">[ ANTES / DEPOIS — assets/results/02 ]</div>
         </div>
@@ -1208,7 +1238,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
 
       <figure class="transformation reveal-fade">
         <div class="transformation__media">
-          <img src="assets/results/03-transformacao.jpg" alt="Transformação 03 — antes e depois" loading="lazy" decoding="async" fetchpriority="low"
+          <img src="assets/results/03-transformacao.webp" alt="Transformação 03 — antes e depois" loading="lazy" decoding="async" fetchpriority="low"
                onerror="this.style.display='none'; this.parentElement.querySelector('.transformation__placeholder').style.display='flex';">
           <div class="transformation__placeholder">[ ANTES / DEPOIS — assets/results/03 ]</div>
         </div>
@@ -1309,9 +1339,9 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
 <section class="mentor">
   <div class="wrap">
     <div class="mentor__media reveal-fade">
-      <img src="assets/mentor/mentor-about.jpg" alt="Mentor GLOW M7" loading="lazy" decoding="async" fetchpriority="low"
+      <img src="assets/mentor/mentor-about.webp" alt="Mentor GLOW M7" loading="lazy" decoding="async" fetchpriority="low"
            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-      <div class="mentor__placeholder" style="display:none;">[ FOTOGRAFIA DO MENTOR — assets/mentor/mentor-about.jpg ]</div>
+      <div class="mentor__placeholder" style="display:none;">[ FOTOGRAFIA DO MENTOR — assets/mentor/mentor-about.webp ]</div>
     </div>
 
     <div class="mentor__copy">
@@ -1406,16 +1436,16 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   // depoimentos — marquee dual (port de components/ui/testimonial-marquee.tsx).
   // Textos/nomes são PLACEHOLDERS de layout. Fotos reais: assets/depoimentos/ (distribuídas).
   const testimonials = [
-    { name: "Lucas",   username: "lucasf",        avatar: "321655598415579930.jpeg", text: "mano eu achei que ia ser só aquelas dicas que a gente já vê no tiktok kkkkk mas tem muita coisa que eu nunca tinha parado pra pensar" },
-    { name: "Gabriel", username: "gabrielm",      avatar: "96545985757078012.jpeg",  text: "comecei mais pela parte de pele e cabelo e já mudou bastante como eu me vejo no espelho" },
-    { name: "Pedro",   username: "pedrohenrique", avatar: "170503535885169605.jpeg", text: "bizarro como uns detalhes pequenos fazem diferença. eu tava focando nas coisas erradas fazia tempo" },
-    { name: "Matheus", username: "matheus.s",     avatar: "@oliverwzq.jpeg",          text: "n achei que ia curtir tanto a parte de estilo e presença, pra mim foi uma das melhores" },
-    { name: "João",    username: "joaov",         avatar: "419186677838472693.jpeg", text: "vc começa vendo uma aula e do nada percebe um monte de coisa que dava pra melhorar sem gastar absurdo" },
-    { name: "Rafael",  username: "rafa.l",        avatar: "113927065569559841.jpeg", text: "o que mais gostei é que n fica só falando pra vc fazer isso ou aquilo, explica o motivo também" },
-    { name: "Bruno",   username: "brunoc",        avatar: "592082682305370298.jpeg", text: "kkkkk comecei achando que minha prioridade era shape e no final pele cabelo e postura fizeram muito mais diferença" },
-    { name: "Caio",    username: "caiom",         avatar: "148126275239783230.jpeg", text: "eu já acompanhava conteúdo de looksmax mas tava tudo muito espalhado. aqui ficou bem mais fácil de seguir" },
-    { name: "André",   username: "andre.r",       avatar: "338614465758540857.jpeg", text: "não foi uma mudança do dia pra noite, mas finalmente senti que tava seguindo uma direção certa" },
-    { name: "Felipe",  username: "felipex",       avatar: "220465344254646314.jpeg", text: "mano a parte de rosto abriu minha cabeça. tinha várias coisas simples que eu literalmente nunca tinha reparado" }
+    { name: "Lucas",   username: "lucasf",        avatar: "321655598415579930.webp", text: "mano eu achei que ia ser só aquelas dicas que a gente já vê no tiktok kkkkk mas tem muita coisa que eu nunca tinha parado pra pensar" },
+    { name: "Gabriel", username: "gabrielm",      avatar: "96545985757078012.webp",  text: "comecei mais pela parte de pele e cabelo e já mudou bastante como eu me vejo no espelho" },
+    { name: "Pedro",   username: "pedrohenrique", avatar: "170503535885169605.webp", text: "bizarro como uns detalhes pequenos fazem diferença. eu tava focando nas coisas erradas fazia tempo" },
+    { name: "Matheus", username: "matheus.s",     avatar: "@oliverwzq.webp",          text: "n achei que ia curtir tanto a parte de estilo e presença, pra mim foi uma das melhores" },
+    { name: "João",    username: "joaov",         avatar: "419186677838472693.webp", text: "vc começa vendo uma aula e do nada percebe um monte de coisa que dava pra melhorar sem gastar absurdo" },
+    { name: "Rafael",  username: "rafa.l",        avatar: "113927065569559841.webp", text: "o que mais gostei é que n fica só falando pra vc fazer isso ou aquilo, explica o motivo também" },
+    { name: "Bruno",   username: "brunoc",        avatar: "592082682305370298.webp", text: "kkkkk comecei achando que minha prioridade era shape e no final pele cabelo e postura fizeram muito mais diferença" },
+    { name: "Caio",    username: "caiom",         avatar: "148126275239783230.webp", text: "eu já acompanhava conteúdo de looksmax mas tava tudo muito espalhado. aqui ficou bem mais fácil de seguir" },
+    { name: "André",   username: "andre.r",       avatar: "338614465758540857.webp", text: "não foi uma mudança do dia pra noite, mas finalmente senti que tava seguindo uma direção certa" },
+    { name: "Felipe",  username: "felipex",       avatar: "220465344254646314.webp", text: "mano a parte de rosto abriu minha cabeça. tinha várias coisas simples que eu literalmente nunca tinha reparado" }
   ];
 
   (function(){
@@ -1574,11 +1604,11 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     const test = new Image();
     test.onload = () => {
       document.querySelector('.cta-final').style.backgroundImage =
-        'radial-gradient(circle at 50% 100%, rgba(47,107,255,.30), rgba(6,18,37,.85) 40%, rgba(2,3,7,.92) 75%), url("assets/brand/zariel-banner.jpg")';
+        'radial-gradient(circle at 50% 100%, rgba(47,107,255,.30), rgba(6,18,37,.85) 40%, rgba(2,3,7,.92) 75%), url("assets/brand/zariel-banner.webp")';
       document.querySelector('.cta-final').style.backgroundSize = 'cover';
       document.querySelector('.cta-final').style.backgroundPosition = 'center';
     };
-    test.src = 'assets/brand/zariel-banner.jpg';
+    test.src = 'assets/brand/zariel-banner.webp';
   })();
 
   /* ===== Coverflow carousel — port de components/ui/coverflow-carousel.tsx ===== */
@@ -1716,6 +1746,24 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
       const img = cd.querySelector('img');
       if (img && !img.complete) img.addEventListener('load', measure, { once: true });
     });
+  })();
+
+  /* ===== YouTube facade — só carrega o player de terceiros no clique ===== */
+  (function(){
+    var f = document.getElementById('videoFacade');
+    if (!f) return;
+    f.addEventListener('click', function(){
+      var id = f.getAttribute('data-ytid');
+      var ifr = document.createElement('iframe');
+      ifr.className = 'video-player';
+      ifr.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1';
+      ifr.title = 'GLOW M7 — vídeo';
+      ifr.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      ifr.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+      ifr.setAttribute('frameborder', '0');
+      ifr.allowFullscreen = true;
+      f.replaceWith(ifr);
+    }, { once: true });
   })();
 </script>
 
