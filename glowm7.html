@@ -62,8 +62,8 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="assets/banner.png" fetchpriority="high" media="(min-width:768px)">
-<link rel="preload" as="image" href="assets/bannercelular.png" fetchpriority="high" media="(max-width:767px)">
+<link rel="preload" as="image" href="assets/banner.jpg" fetchpriority="high" media="(min-width:768px)">
+<link rel="preload" as="image" href="assets/bannercelular.jpg" fetchpriority="high" media="(max-width:767px)">
 <style>
   :root{
     --black:#020307;
@@ -205,22 +205,18 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .section-cta{width:100%;}
   }
 
-  /* ============ SHINY CTA — port do componente ShinyButton (components/ui/shiny-button.tsx) ============ */
-  @property --shiny-angle { syntax:"<angle>"; initial-value:0deg; inherits:false; }
-  @property --shiny-angle-offset { syntax:"<angle>"; initial-value:0deg; inherits:false; }
-  @property --shiny-percent { syntax:"<percentage>"; initial-value:5%; inherits:false; }
-  @property --shiny-shine { syntax:"<color>"; initial-value:#ffffff; inherits:false; }
-
+  /* ============ SHINY CTA — port do ShinyButton (components/ui/shiny-button.tsx) ============
+     Reescrito para performance mobile: a borda "shiny" é um pseudo-elemento com
+     conic-gradient ESTÁTICO girado só por transform:rotate (composição na GPU,
+     zero repaint por frame). Sem @property animado, sem animation-composition,
+     sem máscara conic animada — que travavam iOS/Chrome mobile. */
   .shiny-cta{
-    --shiny-cta-bg:#020307;
-    --shiny-cta-bg-subtle:#0a1327;
-    --shiny-cta-fg:#ffffff;
-    --shiny-cta-highlight:#4F7DFF;
-    --shiny-cta-highlight-subtle:#8FB0FF;
-    --shiny-anim:shiny-angle linear infinite;
-    --shiny-duration:4s;
-    --shiny-shadow-size:2px;
-    --shiny-transition:800ms cubic-bezier(.25,1,.5,1);
+    --sc-bg:#020307;
+    --sc-fg:#ffffff;
+    --sc-blue:#4F7DFF;
+    --sc-blue-soft:#8FB0FF;
+    --sc-dur:5s;
+    --sc-ring:1.5px;
 
     isolation:isolate;
     position:relative;
@@ -239,89 +235,49 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     font-weight:600;
     letter-spacing:.1em;
     text-transform:uppercase;
-    border:1px solid transparent;
     border-radius:360px;
-    color:var(--shiny-cta-fg);
-    background:linear-gradient(var(--shiny-cta-bg),var(--shiny-cta-bg)) padding-box,
-      conic-gradient(
-        from calc(var(--shiny-angle) - var(--shiny-angle-offset)),
-        transparent,
-        var(--shiny-cta-highlight) var(--shiny-percent),
-        var(--shiny-shine) calc(var(--shiny-percent) * 2),
-        var(--shiny-cta-highlight) calc(var(--shiny-percent) * 3),
-        transparent calc(var(--shiny-percent) * 4)
-      ) border-box;
-    box-shadow:inset 0 0 0 1px var(--shiny-cta-bg-subtle);
-    transition:var(--shiny-transition);
-    transition-property:--shiny-angle-offset, --shiny-percent, --shiny-shine;
+    color:var(--sc-fg);
+    background:var(--sc-bg);
+    box-shadow:0 0 0 1px rgba(79,131,255,.14), 0 10px 30px -12px rgba(47,107,255,.28);
+    transition:transform .3s var(--ease), box-shadow .3s ease;
   }
-  .shiny-cta::before,
-  .shiny-cta::after,
-  .shiny-cta span::before{
-    content:"";
-    pointer-events:none;
-    position:absolute;
-    inset-inline-start:50%;
-    inset-block-start:50%;
-    translate:-50% -50%;
-    z-index:-1;
-  }
-  .shiny-cta:active{ translate:0 1px; }
-
+  /* anel girando — só transform, sem repaint */
   .shiny-cta::before{
-    --size:calc(100% - var(--shiny-shadow-size) * 3);
-    --position:2px;
-    --space:calc(var(--position) * 2);
-    width:var(--size);
-    height:var(--size);
-    background:radial-gradient(circle at var(--position) var(--position), #fff calc(var(--position) / 4), transparent 0) padding-box;
-    background-size:var(--space) var(--space);
-    background-repeat:space;
-    mask-image:conic-gradient(from calc(var(--shiny-angle) + 45deg), #000, transparent 10% 90%, #000);
+    content:"";
+    position:absolute;
+    inset:-60%;
+    z-index:0;
+    pointer-events:none;
+    background:conic-gradient(from 0deg,
+      transparent 0deg 214deg,
+      rgba(79,131,255,.22) 250deg,
+      var(--sc-blue-soft) 288deg,
+      #e4ecff 301deg,
+      var(--sc-blue-soft) 314deg,
+      rgba(79,131,255,.22) 350deg,
+      transparent 360deg);
+    animation:shiny-spin var(--sc-dur) linear infinite;
+    transition:filter .4s ease;
+  }
+  /* preenchimento interno — deixa aparecer só ~1.5px de anel */
+  .shiny-cta::after{
+    content:"";
+    position:absolute;
+    inset:var(--sc-ring);
+    z-index:1;
+    pointer-events:none;
     border-radius:inherit;
-    opacity:.4;
-    z-index:-1;
+    background:var(--sc-bg);
   }
-  .shiny-cta::after{
-    --shiny-anim:shiny-shimmer linear infinite;
-    width:100%;
-    aspect-ratio:1;
-    background:linear-gradient(-50deg, transparent, var(--shiny-cta-highlight), transparent);
-    mask-image:radial-gradient(circle at bottom, transparent 40%, #000);
-    opacity:.55;
-  }
-  .shiny-cta span{ z-index:1; }
-  .shiny-cta span::before{
-    --size:calc(100% + 1rem);
-    width:var(--size);
-    height:var(--size);
-    box-shadow:inset 0 -1ex 2rem 4px var(--shiny-cta-highlight);
-    opacity:0;
-    transition:opacity var(--shiny-transition);
-    animation:calc(var(--shiny-duration) * 1.5) shiny-breathe linear infinite;
-  }
-  .shiny-cta,
-  .shiny-cta::before,
-  .shiny-cta::after{
-    animation:var(--shiny-anim) var(--shiny-duration),
-      var(--shiny-anim) calc(var(--shiny-duration) / .4) reverse paused;
-    animation-composition:add;
-  }
+  .shiny-cta > span{ position:relative; z-index:2; }
   .shiny-cta:is(:hover,:focus-visible){
-    --shiny-percent:20%;
-    --shiny-angle-offset:95deg;
-    --shiny-shine:var(--shiny-cta-highlight-subtle);
+    transform:translateY(-2px);
+    box-shadow:0 0 0 1px rgba(143,176,255,.28), 0 16px 40px -14px rgba(47,107,255,.4);
   }
-  .shiny-cta:is(:hover,:focus-visible),
-  .shiny-cta:is(:hover,:focus-visible)::before,
-  .shiny-cta:is(:hover,:focus-visible)::after{
-    animation-play-state:running;
-  }
-  .shiny-cta:is(:hover,:focus-visible) span::before{ opacity:1; }
+  .shiny-cta:is(:hover,:focus-visible)::before{ filter:brightness(1.35) saturate(1.1); animation-duration:calc(var(--sc-dur) / 1.6); }
+  .shiny-cta:active{ transform:translateY(1px); }
 
-  @keyframes shiny-angle{ to{ --shiny-angle:360deg; } }
-  @keyframes shiny-shimmer{ to{ rotate:360deg; } }
-  @keyframes shiny-breathe{ from,to{ scale:1; } 50%{ scale:1.2; } }
+  @keyframes shiny-spin{ to{ transform:rotate(1turn); } }
 
   .shiny-cta--block{ width:100%; }
 
@@ -337,10 +293,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .shiny-cta{ padding:1rem 1.3rem; font-size:.78rem; letter-spacing:.05em; }
   }
   @media (prefers-reduced-motion:reduce){
-    .shiny-cta,
-    .shiny-cta::before,
-    .shiny-cta::after,
-    .shiny-cta span::before{ animation:none !important; }
+    .shiny-cta::before{ animation:none; }
   }
 
   /* navbar */
@@ -353,9 +306,13 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     will-change:background-color;
   }
   .navbar.scrolled{
-    background:rgba(2,3,7,.82);
-    backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    background:rgba(2,3,7,.86);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
     border-bottom:1px solid var(--neon-border);
+  }
+  @media (max-width:767px){
+    /* backdrop-blur repinta atrás do header fixo a cada frame de scroll — mais barato no mobile */
+    .navbar.scrolled{ background:rgba(2,3,7,.94); backdrop-filter:none; -webkit-backdrop-filter:none; }
   }
   .navbar__inner{
     max-width:1360px; margin-inline:auto;
@@ -576,7 +533,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   }
   @media (max-width:767px){
     .newhero{min-height:100svh; align-content:end;}
-    /* mobile usa assets/bannercelular.png (portrait) via <picture> */
+    /* mobile usa assets/bannercelular.jpg (portrait) via <picture> */
     .newhero__img{object-position:50% 42%;}
     .newhero__scrim{
       background:
@@ -661,7 +618,10 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   .modules{background:var(--black);}
   .modules__head{margin-bottom:64px;}
   /* ---- Coverflow carousel (port de components/ui/coverflow-carousel.tsx) ---- */
-  .cf{ --cf-card:clamp(148px,22vw,260px); width:100%; }
+  .cf{
+    --cf-card:clamp(148px,22vw,260px); width:100%;
+    content-visibility:auto; contain-intrinsic-size:1px 460px;
+  }
   .cf__viewport{
     position:relative;
     overflow:hidden;
@@ -688,8 +648,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     border-radius:1rem;
     overflow:hidden;
     background:linear-gradient(150deg,#0a1526,#05070d);
-    box-shadow:0 30px 60px -14px rgba(0,0,0,.65), 0 0 0 1px rgba(79,131,255,.14);
-    will-change:transform;
+    box-shadow:0 20px 45px -16px rgba(0,0,0,.6), 0 0 0 1px rgba(79,131,255,.14);
     transform:translateX(-50%);
   }
   .cf__card img{
@@ -830,12 +789,13 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     padding-block:2rem;
     overflow:hidden;
     --tm-duration:34s;
+    content-visibility:auto; contain-intrinsic-size:1px 520px;
   }
   .tm__row{ display:flex; overflow:hidden; padding:.5rem; --tm-gap:1rem; }
   .tm__group{
     display:flex; flex-shrink:0; justify-content:flex-start;
     gap:var(--tm-gap); min-width:100%; padding-right:var(--tm-gap);
-    will-change:transform; backface-visibility:hidden;
+    transform:translate3d(0,0,0); backface-visibility:hidden;
   }
   .tm__group--left  { animation:tm-left  var(--tm-duration) linear infinite; }
   .tm__group--right { animation:tm-right var(--tm-duration) linear infinite; }
@@ -1102,8 +1062,8 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
 <!-- ============ HERO — CINEMATOGRÁFICA ============ -->
 <header class="newhero">
   <picture>
-    <source media="(max-width:767px)" srcset="assets/bannercelular.png">
-    <img class="newhero__img" src="assets/banner.png" alt="" aria-hidden="true"
+    <source media="(max-width:767px)" srcset="assets/bannercelular.jpg">
+    <img class="newhero__img" src="assets/banner.jpg" alt="" aria-hidden="true"
          width="1916" height="821" fetchpriority="high" decoding="async"
          onerror="this.style.display='none'">
   </picture>
