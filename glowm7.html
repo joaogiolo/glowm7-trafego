@@ -138,7 +138,6 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     line-height:1.65;
   }
 
-  /* section ghost title */
   .section-ghost-title{
     position:absolute; z-index:0;
     top:50%; left:50%; transform:translate(-50%,-50%);
@@ -149,7 +148,6 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     pointer-events:none; user-select:none;
   }
 
-  /* reveal */
   .reveal-line{
     display:block;
     opacity:0;
@@ -167,55 +165,11 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   }
   .reveal-fade.is-visible{opacity:1; transform:translateY(0);}
 
-  /* premium cta — navy / neon */
-  .premium-cta{
-    display:inline-flex;
-    align-items:stretch;
-    min-height:60px;
-    background:linear-gradient(135deg, #102B5C, #173E86);
-    color:#fff;
-    border:1px solid var(--neon-border);
-    border-radius:8px;
-    overflow:hidden;
-    text-decoration:none;
-    box-shadow:0 14px 45px rgba(47,107,255,.13);
-    transition:transform .35s var(--ease), box-shadow .35s var(--ease), background .35s ease;
-  }
-  .premium-cta__label{
-    display:flex; align-items:center;
-    padding:0 28px;
-    font-size:13px; font-weight:600; letter-spacing:.06em;
-    white-space:nowrap;
-  }
-  .premium-cta__icon{
-    width:60px; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-    border-left:1px solid rgba(255,255,255,.16);
-    font-size:19px;
-    transition:transform .35s var(--ease), background .35s ease;
-  }
-  .premium-cta:hover{
-    transform:translateY(-3px);
-    background:linear-gradient(135deg, #173875, #2250A8);
-    box-shadow:0 18px 55px rgba(47,107,255,.24);
-  }
-  .premium-cta:hover .premium-cta__icon{background:rgba(255,255,255,.08); transform:translate(2px,-2px);}
-
-  @media (max-width:640px){
-    .premium-cta{width:100%;}
-    .premium-cta__label{padding:0 22px; flex:1;}
-  }
-
   .section-cta{display:flex; justify-content:center; margin-top:56px;}
   @media (max-width:640px){
     .section-cta{width:100%;}
   }
 
-  /* ============ SHINY CTA — port do ShinyButton (components/ui/shiny-button.tsx) ============
-     Reescrito para performance mobile: a borda "shiny" é um pseudo-elemento com
-     conic-gradient ESTÁTICO girado só por transform:rotate (composição na GPU,
-     zero repaint por frame). Sem @property animado, sem animation-composition,
-     sem máscara conic animada — que travavam iOS/Chrome mobile. */
   .shiny-cta{
     --sc-bg:#020307;
     --sc-fg:#ffffff;
@@ -247,7 +201,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     box-shadow:0 0 0 1px rgba(79,131,255,.14), 0 10px 30px -12px rgba(47,107,255,.28);
     transition:transform .3s var(--ease), box-shadow .3s ease;
   }
-  /* anel girando — só transform, sem repaint */
+
   .shiny-cta::before{
     content:"";
     position:absolute;
@@ -265,7 +219,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     animation:shiny-spin var(--sc-dur) linear infinite;
     transition:filter .4s ease;
   }
-  /* preenchimento interno — deixa aparecer só ~1.5px de anel */
+
   .shiny-cta::after{
     content:"";
     position:absolute;
@@ -298,9 +252,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   @media (max-width:380px){
     .shiny-cta{ padding:1rem 1.3rem; font-size:.78rem; letter-spacing:.05em; }
   }
-  /* nota: reduced-motion tratado no bloco consolidado no fim do <style> (mantém o brilho, só mais lento) */
 
-  /* navbar */
   .navbar{
     position:fixed; inset-inline:0; top:0; z-index:50;
     background:transparent;
@@ -315,7 +267,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     border-bottom:1px solid var(--neon-border);
   }
   @media (max-width:767px){
-    /* backdrop-blur repinta atrás do header fixo a cada frame de scroll — mais barato no mobile */
+
     .navbar.scrolled{ background:rgba(2,3,7,.94); backdrop-filter:none; -webkit-backdrop-filter:none; }
   }
   .navbar__inner{
@@ -418,7 +370,6 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .mobile-menu{display:none;}
   }
 
-  /* ============ HERO — CINEMATOGRÁFICA ============ */
   .newhero{
     position:relative;
     min-height:90vh;
@@ -479,23 +430,37 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   }
   .newhero__title > span{display:block;}
   .newhero__title-em{
-    color:#4f7dff;
+    position:relative;
+    display:inline-block;
+    overflow:hidden;
+    isolation:isolate;
     white-space:nowrap;
+    color:#4f7dff;
     -webkit-text-fill-color:transparent;
     background-color:currentColor;
-    background-image:linear-gradient(100deg, currentColor 0%, rgba(255,255,255,.92) 42%, rgba(255,255,255,.92) 58%, currentColor 100%);
-    background-repeat:no-repeat;
-    background-size:50% 200%;
-    background-position:-100% 0;
+    background-image:linear-gradient(currentColor,currentColor);
     -webkit-background-clip:text;
     background-clip:text;
     filter:drop-shadow(0 0 22px rgba(68,117,255,.32));
+  }
+  .newhero__title-em::after{
+    content:"";
+    position:absolute; top:-30%; left:0;
+    width:70%; height:160%;
+    pointer-events:none;
+    background:linear-gradient(90deg,
+      transparent 0%, transparent 38%,
+      rgba(255,255,255,.5) 47%, rgba(255,255,255,.82) 50%, rgba(255,255,255,.5) 53%,
+      transparent 62%, transparent 100%);
+    mix-blend-mode:screen;
+    will-change:transform;
+    transform:translate3d(-100%,0,0) rotate(14deg);
     animation:newheroShimmer 5s linear 1.4s infinite;
   }
   @keyframes newheroShimmer{
-    0%{background-position:-100% 0;}
-    48%{background-position:250% 0;}
-    100%{background-position:250% 0;}
+    0%   { transform:translate3d(-100%,0,0) rotate(14deg); }
+    45%  { transform:translate3d(230%,0,0)  rotate(14deg); }
+    100% { transform:translate3d(230%,0,0)  rotate(14deg); }
   }
   .newhero__subtitle{
     margin:clamp(20px,2.6vw,30px) 0 0;
@@ -537,7 +502,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   }
   @media (max-width:767px){
     .newhero{min-height:100svh; align-content:end;}
-    /* mobile usa assets/bannercelular.jpg (portrait) via <picture> */
+
     .newhero__img{object-position:50% 42%;}
     .newhero__scrim{
       background:
@@ -576,7 +541,6 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .newhero__cta{animation:none; opacity:1; transform:none;}
   }
 
-  /* ============ VIDEO SECTION ============ */
   .video-section{background:var(--black-soft);}
   .video-section .wrap{
     display:grid; grid-template-columns:1fr 430px; gap:64px; align-items:center;
@@ -629,10 +593,9 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .video-container{width:min(100%,420px);}
   }
 
-  /* ============ MODULES ============ */
   .modules{background:var(--black);}
   .modules__head{margin-bottom:64px;}
-  /* ---- Coverflow carousel (port de components/ui/coverflow-carousel.tsx) ---- */
+
   .cf{
     --cf-card:clamp(148px,22vw,260px); width:100%;
     content-visibility:auto; contain-intrinsic-size:1px 460px;
@@ -708,7 +671,6 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .cf__caption.is-swap{ animation:none; }
   }
 
-  /* ============ RESULTS ============ */
   .results{background:var(--navy-deep); content-visibility:auto; contain-intrinsic-size:1px 1600px;}
   .results__head{margin-bottom:56px;}
   .transformation{position:relative;}
@@ -748,7 +710,6 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .results-grid{grid-template-columns:1fr; max-width:420px; margin-inline:auto;}
   }
 
-  /* ============ MENTOR ============ */
   .mentor{background:var(--black); content-visibility:auto; contain-intrinsic-size:1px 900px;}
   .mentor .wrap{display:grid; grid-template-columns:44% 1fr; gap:64px; align-items:center;}
   .mentor__media{
@@ -789,13 +750,11 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .mentor .wrap{grid-template-columns:1fr; gap:40px;}
   }
 
-  /* ============ TESTIMONIALS ============ */
   .testimonials{background:var(--black);}
   .testimonials__head{margin-bottom:56px; max-width:640px;}
   .testimonials__head .section-title{margin-top:16px;}
   .testimonials__head .lede{margin-top:16px;}
 
-  /* ---- Testimonial marquee — port de components/ui/testimonial-marquee.tsx (variant "dual") ---- */
   @keyframes tm-left  { from{transform:translate3d(0,0,0);}      to{transform:translate3d(-100%,0,0);} }
   @keyframes tm-right { from{transform:translate3d(-100%,0,0);}  to{transform:translate3d(0,0,0);} }
   .tm{
@@ -814,7 +773,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   }
   .tm__group--left  { animation:tm-left  var(--tm-duration) linear infinite; }
   .tm__group--right { animation:tm-right var(--tm-duration) linear infinite; }
-  /* pausa no hover SÓ em dispositivos com mouse real — no touch o :hover "gruda" e trava o marquee */
+
   @media (hover:hover) and (pointer:fine){
     .tm__row:hover .tm__group{ animation-play-state:paused; }
   }
@@ -867,9 +826,7 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .tm__quote{ font-size:.85rem; }
     .tm::before, .tm::after{ width:10%; }
   }
-  /* reduced-motion do marquee: bloco consolidado no fim do <style> (continua rodando, bem devagar) */
 
-  /* ============ GARANTIA ============ */
   .guarantee{background:var(--navy); padding-block:clamp(64px,7vw,110px); content-visibility:auto; contain-intrinsic-size:1px 700px;}
   .guarantee__grid{
     display:grid; grid-template-columns:1.15fr .85fr; gap:64px; align-items:center;
@@ -914,7 +871,6 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .guarantee__stat{order:-1;}
   }
 
-  /* ============ FAQ ============ */
   .faq{background:var(--black-soft); content-visibility:auto; contain-intrinsic-size:1px 1500px;}
   .faq__glow{
     position:absolute; z-index:0;
@@ -1010,7 +966,6 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
     .faq-item__answer{padding-left:calc(28px + 14px); padding-right:4px;}
   }
 
-  /* ============ CTA FINAL ============ */
   .cta-final{
     background:radial-gradient(circle at 50% 100%, rgba(47,107,255,.30), var(--navy-deep) 40%, var(--black) 75%);
     color:#fff; text-align:center;
@@ -1025,25 +980,21 @@ src="https://www.facebook.com/tr?id=28129194843358322&ev=PageView&noscript=1"
   .cta-final .lede{margin-inline:auto; text-align:center; position:relative; z-index:1;}
   .cta-final__cta{margin-top:40px; position:relative; z-index:1;}
 
-  /* ============ FOOTER ============ */
   footer{background:var(--black); color:var(--text-secondary); padding-block:40px;}
   footer .wrap{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; font-size:12px;}
   footer a{text-decoration:none; color:inherit;}
   footer nav{display:flex; gap:28px;}
 
   @media (prefers-reduced-motion: reduce){
-    /* NÃO congelar tudo: iOS Low Power Mode / "Reduzir movimento" ativam este media query.
-       Desligamos apenas entradas/deslizes (risco vestibular) e deixamos os efeitos
-       decorativos contínuos (marquee, brilho do botão, shimmer) rodando — mais lentos. */
     *, *::before, *::after{ transition-duration:.08s !important; scroll-behavior:auto !important; }
     .reveal-line, .reveal-fade,
     .newhero__title > span, .newhero__subtitle, .newhero__cta,
-    .hero-line, .guarantee__stat.reveal-fade{
+    .guarantee__stat.reveal-fade{
       animation:none !important; opacity:1 !important; transform:none !important; filter:none !important;
     }
     .tm__group--left, .tm__group--right{ animation-duration:90s !important; }
     .shiny-cta::before{ animation-duration:16s !important; }
-    .newhero__title-em{ animation-duration:10s !important; }
+    .newhero__title-em::after{ animation-duration:10s !important; }
     .cf__caption.is-swap{ animation:none !important; }
   }
 </style>
